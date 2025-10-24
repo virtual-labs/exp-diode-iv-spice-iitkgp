@@ -1,39 +1,116 @@
-{
-  "version": 2.0,
+
+  {
+	  "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "1. What does the Gummel plot method characterize in a BJT?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Voltage gain",
+        "b": "Current gain",
+        "c": "Power gain",
+        "d": "Frequency gain"
       },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "a",
+      "correctAnswer": "b",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "2. The Gummel plot is used to analyze the relationship between which of the following parameters?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "Base-emitter voltage (V_BE) and collector current (I_C)",
+        "b": "Base current (I_B) and collector current (I_C)",
+        "c": "Emitter current (I_E) and base current (I_B)",
+        "d": "Base-emitter voltage (V_BE) and base current (I_B)"
       },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "3. What is typically plotted on the y-axis in a Gummel plot?",
+      "answers": {
+        "a": "Base current (I_B)",
+        "b": "Collector current (I_C)",
+        "c": "Base-emitter voltage (V_BE)",
+        "d": "Saturation current (I_S)"
+      },
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "4. In the Gummel plot, the relationship between collector current (I_C) and base-emitter voltage (V_BE) shows what type of relationship?",
+      "answers": {
+        "a": "Exponential",
+        "b": "Linear",
+        "c": "Quadratic",
+        "d": "Logarithmic"
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "5. What does the slope of the collector current (I_C) versus base-emitter voltage (V_BE) plot represent?",
+      "answers": {
+        "a": "Saturation current (I_S)",
+        "b": "Current gain (\u03b2)",
+        "c": "Emitter efficiency",
+        "d": "Thermal voltage (V_T)"
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "6. How does the Gummel plot help in BJT characterization?",
+      "answers": {
+        "a": "By measuring thermal resistance",
+        "b": "By extracting parameters like saturation current and current gain",
+        "c": "By measuring power dissipation",
+        "d": "By analyzing frequency response"
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "7. What parameter of a BJT is directly related to the ideality factor in the Gummel plot?",
+      "answers": {
+        "a": "Saturation current (I_S)",
+        "b": "Base-emitter voltage (V_BE)",
+        "c": "Emitter efficiency",
+        "d": "Thermal voltage (V_T)"
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "8. How can you determine the current gain (\u03b2) of a BJT from the Gummel plot?",
+      "answers": {
+        "a": "By calculating the slope of the base current (I_B) versus base-emitter voltage (V_BE) plot",
+        "b": "By calculating the slope of the collector current (I_C) versus base-emitter voltage (V_BE) plot",
+        "c": "By dividing base current (I_B) by collector current (I_C)",
+        "d": "By dividing collector current (I_C) by base current (I_B)"
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "9. What does the term 'early effect' refer to in the context of BJTs?",
+      "answers": {
+        "a": "Temperature dependence of collector current",
+        "b": "Voltage dependence of base current",
+        "c": "Voltage dependence of collector current",
+        "d": "Temperature dependence of base current"
       },
       "correctAnswer": "c",
-      "difficulty": "beginner"
+      "difficulty": "advanced"
+    },
+    {
+      "question": "10. In the Gummel plot, the linear region where the base current (I_B) is proportional to base-emitter voltage (V_BE) is known as the ______ region.",
+      "answers": {
+        "a": "Saturation",
+        "b": "Active",
+        "c": "Cut-off",
+        "d": "Breakdown"
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
     }
   ]
 }

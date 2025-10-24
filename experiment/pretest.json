@@ -1,39 +1,115 @@
-{
-  "version": 2.0,
+  {
+	  "version": 2.0,
   "questions": [
     {
-      "question": "This is a Sample Question 1?",
+      "question": "1. What does the term 'Gummel plot' specifically refer to in the context of BJT characterization?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
+        "a": "A plot of base-emitter voltage (V_BE) versus collector current (I_C)",
+        "b": "A plot of base current (I_B) versus base-emitter voltage (V_BE)",
+        "c": "A plot of collector current (I_C) versus base current (I_B)",
+        "d": "A plot of base-emitter voltage (V_BE) versus base current (I_B)"
       },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+      "correctAnswer": "b",
+      "difficulty": "beginner"
+    },
+    {
+      "question": "2. In a Gummel plot, what does the slope of the base current (I_B) versus base-emitter voltage (V_BE) plot represent?",
+      "answers": {
+        "a": "Saturation current (I_S)",
+        "b": "Current gain (\u03b2)",
+        "c": "Emitter efficiency",
+        "d": "Thermal voltage (V_T)"
       },
       "correctAnswer": "a",
       "difficulty": "beginner"
     },
     {
-      "question": "This is a Sample Question 2?",
+      "question": "3. The Gummel plot is commonly used to determine which of the following parameters of a BJT?",
       "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
+        "a": "Collector-emitter voltage (V_CE)",
+        "b": "Base-emitter voltage (V_BE)",
+        "c": "Saturation current (I_S)",
+        "d": "Thermal resistance (R_th)"
       },
       "correctAnswer": "c",
       "difficulty": "beginner"
+    },
+    {
+      "question": "4. What is the primary purpose of characterizing a BJT using the Gummel plot method?",
+      "answers": {
+        "a": "To analyze power dissipation",
+        "b": "To optimize frequency response",
+        "c": "To extract key parameters like current gain and saturation current",
+        "d": "To measure voltage drop across the collector-emitter junction"
+      },
+      "correctAnswer": "c",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "5. What does the ideality factor in a BJT refer to?",
+      "answers": {
+        "a": "A measure of how closely the BJT follows the ideal exponential relationship",
+        "b": "A measure of collector current efficiency",
+        "c": "A measure of base current leakage",
+        "d": "A measure of temperature dependence"
+      },
+      "correctAnswer": "a",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "6. How does the Gummel plot help in analyzing BJT operation in different regions?",
+      "answers": {
+        "a": "By identifying breakdown voltage",
+        "b": "By showing linear and saturation regions clearly",
+        "c": "By measuring thermal resistance",
+        "d": "By calculating power gain"
+      },
+      "correctAnswer": "b",
+      "difficulty": "intermediate"
+    },
+    {
+      "question": "7. What does the slope of the collector current (I_C) versus base-emitter voltage (V_BE) plot determine?",
+      "answers": {
+        "a": "Emitter efficiency",
+        "b": "Saturation current (I_S)",
+        "c": "Current gain (\u03b2)",
+        "d": "Thermal voltage (V_T)"
+      },
+      "correctAnswer": "b",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "8. In a Gummel plot, what does the term 'early effect' refer to?",
+      "answers": {
+        "a": "Voltage dependence of collector current",
+        "b": "Temperature dependence of base current",
+        "c": "Voltage dependence of base current",
+        "d": "Temperature dependence of collector current"
+      },
+      "correctAnswer": "a",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "9. How can the Gummel plot aid in optimizing BJT circuit design?",
+      "answers": {
+        "a": "By minimizing thermal resistance",
+        "b": "By maximizing current gain",
+        "c": "By ensuring proper biasing and performance",
+        "d": "By increasing breakdown voltage"
+      },
+      "correctAnswer": "c",
+      "difficulty": "advanced"
+    },
+    {
+      "question": "10. What region of operation is characterized by a Gummel plot where collector current (I_C) remains relatively constant with changes in base-emitter voltage (V_BE)?",
+      "answers": {
+        "a": "Cut-off",
+        "b": "Active",
+        "c": "Saturation",
+        "d": "Breakdown"
+      },
+      "correctAnswer": "c",
+      "difficulty": "advanced"
     }
   ]
 }

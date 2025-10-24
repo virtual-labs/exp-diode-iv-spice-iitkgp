@@ -1,24 +1,31 @@
 ## Introduction
 
+<div align="center">
+<img src="experiment/images/iitkgp.png" width="10%">
+</div>
 
-<b>Discipline | <b>Fill your discipline name here
+<b>Discipline | <b> Electronic Engineering 
 :--|:--|
-<b> Lab | <b> Fill your lab name here
-<b> Experiment|     <b> Fill your experiment name and number here
+<b> Lab | <b> **Microelectronics and VLSI Engineering Laboratory**
+<b> Experiment|     <b> **PMOS Capacitor Band Diagram**
+
 
 ### About the Experiment 
 
-Fill a brief description of this experiment here
+<!--Fill a brief description of this experiment here-->
 
-<b>Name of Developer | <b> Fill the name of experiment owner here 
+<b>Name ofSubject-matter expert | <b> **Prof. C. K. Maiti**
 :--|:--|
-<b> Institute | <b>  
-<b> Email id|     <b>  
-<b> Department |  
+<b> Institute | <b>  **Indian Institute of Technology Kharagpur**
+<b> Email id|     <b>  **ckm@ece.iitkgp.ernet.in**
+<b> Department |  **Electronics & Electrical Communication Engineering**
+<b>Webpage| <b> https://www.iitkgp.ac.in/search-result/Chinmay%20Kumar%20Maiti
+
+
 
 ### Contributors List
 
-SrNo | Name | Faculty or Student | Department| Institute | Email id
+SrNo | Name | VLabs Developer or Integration Engineer | Designation | Department| Institute
 :--|:--|:--|:--|:--|:--|
-1 | . | . | . | . | .
-2 | . | . | . | . | .
+1 | **Ananda Maiti** |Developer | Project intern | Department of Electronics & ECE | IIT Kharagpur |
+2 | **Subhasis Mahata** |AWS Integration Engineer | Senior Project Scientist | Department of Mechanical Engineering | IIT Kharagpur | 
