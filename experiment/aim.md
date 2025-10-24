@@ -1,6 +1,4 @@
 ## Aim of experiment
-The main objectives of the Technology CAD (TCAD) laboratory are:
-
 
 1) The use of TCAD tools allows students to learn the fundamentals of device fabrication and characterization in a virtual environment including the determination of SPICE parameters;
 
