@@ -1,13 +1,727 @@
 <!DOCTYPE html>
-<html>
+<html lang="en"><!--html tag start-->
 <head>
-	<!-- Add CSS at the head of HTML file -->
-    <link rel="stylesheet" href="./css/main.css">
-</head>
-<body>
-		<!-- Your code goes here-->
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <title>PMOS Capacitor Band Diagram</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+    
+    <!-- Font Awesome and jQuery UI CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui/1.12.1/themes/base/jquery-ui.css">   
+    <link rel="stylesheet" href="adik.css"> 
+    
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- MathJax for mathematical typesetting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
+    
+    <!-- Additional Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.2.1/math.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+   
+    <script src="./js/jquery.flot.min.js"></script>
 
-	<!-- Add JS at the bottom of HTML file --> 
-        <script src="./js/main.js"></script>
-</body>
-</html>
+
+
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+      }
+      .form-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      
+      td {
+        padding: 10px;
+        text-align: right;
+      }
+      td:nth-child(2n) {
+        text-align: left;
+        padding-left: 5px;
+      }
+      input[type="text"] {
+        width: 100px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      input[type="button"] {
+        padding: 8px 12px;
+        margin: 5px;
+        border: none;
+        border-radius: 4px;
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      input[type="button"]:hover {
+        background-color: #0056b3;
+      }
+      .button-group {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .button-group input[type="button"] {
+        margin: 5px;
+      }
+      .material-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .material-buttons input[type="button"] {
+        background-color: #28a745;
+      }
+      .material-buttons input[type="button"]:hover {
+        background-color: #218838;
+      }
+      .voltage-control {
+        text-align: center;
+        margin-top: 20px;
+      }
+      .voltage-control input[type="button"] {
+        background-color: #dc3545;
+      }
+      .voltage-control input[type="button"]:hover {
+        background-color: #c82333;
+      }
+
+
+      .table-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    td {
+      padding: 10px;
+      text-align: left;
+    }
+    td p {
+      margin: 0;
+      display: flex;
+      align-items: center;
+    }
+    td span {
+      margin-left: 5px;
+    }
+    .math {
+      font-family: "Times New Roman", serif;
+      font-style: italic;
+    }
+    .flex-container {
+      display: flex;
+      align-items: center;
+    }
+    .center-text {
+      text-align: center;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    .value {
+      font-weight: bold;
+      color: #007bff;
+    }
+    </style>
+
+  </head>
+<body><!--body tag start-->
+    
+    
+   
+	
+    <div class="container p-3 my-5 text-left border"><!--3rd Container under body tag start-->
+      <div class="row"><!--First row under 3rd container start-->
+        <div class="col-md-1"></div><!--First col under 3rd container start& end-->
+        <div class="col-md-10"><!--2nd col under 3rd container start-->
+            <p class="text-center bg-success"> <a class="nav-link" data-bs-toggle="tab"  id="instcontrol" style="background-color:#128BD9"  ><span class=" h3 text-dark"> Instructions </span></a>
+              <div id="inst" style="display:block;height:200px;overflow-y:auto;text-align:justify">
+					
+					<!-- INSRTUCTION START -->
+          <ol>
+    
+            <h4>Input Parameters</h4>
+            <ul>
+              <li><strong>ϕm, ϕs (Work Function of the Metal and Semiconductor):</strong> Enter the values in electron volts (eV).</li>
+              <li><strong>χ (Electron Affinity):</strong> Enter the electron affinity in eV.</li>
+              <li><strong>tox, tox2 (Oxide Thickness):</strong> Enter the oxide thickness in nanometers (nm).</li>
+              <li><strong>εox, εox2 (Dielectric Constants of the Oxides):</strong> Enter the dielectric constants.</li>
+              <li><strong>Eg (Bandgap Energy):</strong> Enter the bandgap energy using the provided formula if needed.</li>
+              <li><strong>Nd (Donor Concentration)</strong> and <strong>Na (Acceptor Concentration):</strong> Enter the concentration values in cm³.</li>
+              <li><strong>T (Temperature):</strong> Enter the operating temperature in Kelvin (K).</li>
+              <li><strong>εsemi (Semiconductor Dielectric Constant):</strong> Enter the value.</li>
+              <li><strong>V (Voltage):</strong> Input the voltage applied across the device.</li>
+              <li><strong>Material Selection (Si, Ge, GaAs):</strong> Choose the material of the semiconductor.</li>
+            </ul>
+  
+            <h4>Submit</h4>
+            <p>Once all parameters are entered, click the <strong>Submit</strong> button to run the simulation.</p>
+  
+            <h4>View Results</h4>
+            <ul>
+              <li><strong>Band Diagram:</strong> Observe the energy levels within the semiconductor, including the conduction band edge, valence band edge, and Fermi level.</li>
+              
+            </ul>
+  
+            <h4>Explore Different Regions</h4>
+            <p>Use the <strong>Accumulation</strong>, <strong>Flatband</strong>, <strong>Depletion</strong>, <strong>Threshold</strong>, and <strong>Inversion</strong> buttons to explore different operational regions of the PMOS transistor.</p>
+  
+            <h4>Additional Notes</h4>
+            <ul>
+              <li>The right side of the screen displays calculated parameters such as the built-in potential (ϕs), maximum depletion width (xP), surface potential (ψs), and threshold voltage (VT).</li>
+              <li>The calculated charge (Q) and electric field (Eox) in the oxide layer are also shown.</li>
+              <li>Make sure to adjust and explore the parameters to see how they affect the band diagram, charge density, and electric field.</li>
+            </ul>
+     
+    </ol>
+				<!-- INSTRUCTION STOP -->	
+					
+		   </div>
+            </p> 
+          </div><!--2nd col under 3rd container end-->
+		  
+        <div class="col-md-1"></div><!--3rd col under 3rd container start& end-->
+      </div><!--First row under 3rd container end-->
+    </div><!--3rd Container under body tag end-->
+	
+   <!--simulation start -->
+   <div>
+    <body style="background-color:white" onload="moscap();"><div id="MathJax_Message" style="display: none;"></div>
+
+
+<style>
+h3 {margin-left:1cm}
+</style>
+
+<script type="text/x-mathjax-config;executed=true">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
+  });
+</script>
+
+
+<script language="JavaScript">
+
+var Ev = [];  //valence band energy
+// d arrays used for plotting
+var d1 = [];  //Ev
+var d2 = [];  //EF
+var d3 = [];  //Ec
+var d4 = [];  //n
+var d5 = [];  //p
+var d6 = [];  //rho
+var d7 = [];  //Electric field
+
+echarge = 1.60217733E-19;
+kb = 1.380658E-23/echarge;  //eV/K
+
+function moscap() { 
+ tox = eval(data.tox.value)*1E-9;
+ na = 1E6*eval(data.na.value);
+ Va = eval(data.V.value); //applied voltage
+ if (Math.abs(Va)<1E-10) {V = 0; data.V.value=0;}
+ Nv = 1E6*eval(data.Nv.value);
+ Nc = 1E6*eval(data.Nc.value);
+ T = eval(data.T.value);
+ Eg = eval(data.Eg.value);
+ phi_m = eval(data.phi_m.value);
+ chi_s = eval(data.chi_s.value);
+ document.getElementById('Eg_txt').innerHTML=Eg.toPrecision(3);
+ eps = 8.854187817E-12*eval(data.eps.value);
+ eps_ox = 8.854187817E-12*eval(data.eps_ox.value);
+ ni=Math.sqrt(Nc*Nv*Math.pow(T/300,3))*Math.exp(1.6022E-19*(-Eg)/(2*1.380658E-23*T));
+ document.getElementById('ni_txt').innerHTML=(ni/1E6).toPrecision(3);
+ Ev0 = kb*T*Math.log(na/Nv); //Ev - EF  far from the oxide
+ Ec0 = kb*T*Math.log(ni*ni/(Nc*na)); //EF - Ec far from the oxide
+ phi_s = chi_s + Eg + Ev0; // work function of semiconductor 
+ document.getElementById('phi_s_txt').innerHTML=(phi_s).toPrecision(3);
+ Vfb = phi_m  - phi_s; // flat band voltage
+ document.getElementById('Vfb_txt').innerHTML=(Vfb).toPrecision(3);
+ VT = 2*tox*Math.sqrt(eps*na*1.380658E-23*T*Math.log(na/ni))/eps_ox+2*kb*T*Math.log(na/ni);  //threshold voltage in depletion approximation
+ document.getElementById('VT_txt').innerHTML=(VT+Vfb).toPrecision(3);
+ xp = 2*Math.sqrt(eps*kb*T*Math.log(na/ni)/(echarge*na)); // maximum depletion width in depletion approximation
+ document.getElementById('xp_txt').innerHTML=(1E6*xp).toPrecision(3);
+ cox= eps_ox/tox;
+ V = Va - phi_m + phi_s; //zero bias should result in a built-in voltage corresponding to the work function difference
+ Es0 = -tox*echarge*na/eps_ox + echarge*na*Math.sqrt(tox*tox/(eps_ox*eps_ox) + 2*(Va - Vfb)/(echarge*na*eps)); //Es from the depletion approximation
+ document.getElementById('Es0_txt').innerHTML=Es0.toPrecision(3);
+ VIB0 = eps*Es0*Es0/(2*echarge*na);  //V_IB from the depletion approximation
+ document.getElementById('VIB0_txt').innerHTML=VIB0.toPrecision(3);
+
+
+/* This section starts with somewhat arbitray initial conditions for Ev(x) and its derivative
+   dEv(x)/dx inside the bulk of the semiconductor and then integrates the Possion equation
+   to the left to calculate the voltage at the semiconductor/oxide interface and then the 
+   voltage at the gate. The calculated voltage at the gate is compared to the desired voltage at the gate 
+   the initial conditions are adjusted to get the calculated value closer to the desired value.
+*/
+  xr = 3.6*xp;   //right position for binary search
+  xm = 1.8*xp; //middle position for binary search
+  xl = 0;      //left position for binary search
+  for (j=0; j<16; j++) {
+    Ev = Ev0;
+    dEvdx = 0;
+    if (V>0) {dEvdx = 1e3; } 
+    if (V<0) {dEvdx = -1e3; } 
+    dx = xm/300;
+    for (i=0; i<301; i++) { //numerical integration using the midpoint method
+      x = xm*(1-i/300);
+      Ev_mid = Ev - dEvdx*dx/2;  //Ev at the midpoint
+      rho_mid = -na - Nc*Math.exp(-(Eg+Ev_mid)/(kb*T)) + Nv*Math.exp(Ev_mid/(kb*T));
+      dEvdx_mid = dEvdx - echarge*rho_mid*0.5*dx/eps;
+      Ev = Ev - dEvdx_mid*dx;
+      dEvdx = dEvdx - echarge*rho_mid*dx/eps;
+    }
+    Vs = Ev0 - Ev;
+    Es = dEvdx;
+    Eox = Es*eps/eps_ox;
+    Vtmp = Vs + Eox*tox;
+
+//binary search
+    if (V<0) {  
+      if (Vtmp > V) {xl = xm; xm = (xr + xl)/2; }
+      if (Vtmp < V) {xr = xm; xm = (xr + xl)/2; } 
+    }
+    else {
+      if (Vtmp < V) {xl = xm; xm = (xr + xl)/2; }
+      if (Vtmp > V) {xr = xm; xm = (xr + xl)/2; } 
+    }
+
+  } // end j
+
+/* This section solves the Possion equation one more time using the optimized initial conditions
+   and saves the data in arrays so it can be plotted.
+*/
+    Ev = Ev0;
+    dEvdx = 0;
+    if (V>0) {dEvdx = 1e3; } 
+    if (V<0) {dEvdx = -1e3; } 
+    dx = xm/300;
+    for (i=0; i<301; i++) { //numerical integration using the midpoint method
+      x = xm*(1-i/300);
+      Ev_mid = Ev - dEvdx*dx/2;  //Ev at the midpoint
+      rho_mid = -na - Nc*Math.exp(-(Eg+Ev_mid)/(kb*T)) + Nv*Math.exp(Ev_mid/(kb*T));
+      dEvdx_mid = dEvdx - echarge*rho_mid*0.5*dx/eps;
+      Ev = Ev - dEvdx_mid*dx;
+      dEvdx = dEvdx - echarge*rho_mid*dx/eps;
+
+      d1[i] = [1E6*x,Ev];
+      d3[i] = [1E6*x,Ev+Eg];
+      n = Nc*Math.exp(-(Eg+Ev)/(kb*T))/1E21;
+      p = Nv*Math.exp(Ev/(kb*T))/1E21
+      d4[i] = [1E6*x,n];
+      d5[i] = [1E6*x,p];
+      d6[i] = [1E6*x,p-n-na/1E21];
+      d7[i] = [1E6*x,dEvdx*1E-6];
+    }
+    d4[301] = [0,0]; d4[302] = [-1E6*(0.25*xp+tox),0];
+    d5[301] = [0,0]; d5[302] = [-1E6*(0.25*xp+tox),0];
+    d6[301] = [0,0]; d6[302] = [-1E6*tox,0]; d6[303] = [-1E6*tox,-d6[300][1]];  d6[304] = [-1E6*(tox-xm/100),-0.92*d6[300][1]]; 
+    d6[305] = [-1E6*(tox+xm/100),-0.92*d6[300][1]]; d6[306] = [-1E6*tox,-d6[300][1]]; d6[307] = [-1E6*tox,0]; d6[308] = [-1E6*(0.25*xp+tox),0];
+    d2[0] = [1E6*xm,0];
+    d2[1] = [0,0];
+    VIB = Ev0 - Ev;
+    Es = dEvdx;
+    Eox = Es*eps/eps_ox;
+    Q = -Es*eps; //the charge on the semiconductor
+    d7[301] = [0,Eox*1E-6]; d7[302]=[-tox*1E6,Eox*1E-6];  d7[303] = [-tox*1E6,0]; d7[304] = [-1E6*(0.25*xp+tox),0];
+    Vtmp = VIB + Eox*tox;
+    d2[3] = null;
+    d2[4] = [-1E6*tox,-Va];
+    d2[5] = [-1E6*(0.25*xp+tox),-Va];
+    d3[301] = [0,d3[300][1]+1];
+    d3[302] = [-1E6*tox,d3[300][1]+1- Eox*tox];
+    d3[303] = [-1E6*tox,-Vtmp];
+    d1[301] = [0,d1[300][1]-1];
+    d1[302] = [-1E6*tox,d1[300][1]-1- Eox*tox];
+    d1[303] = [-1E6*tox,-Vtmp];
+    if (V==0) { //
+      d1[0] = [1E6*xp,Ev0]; d2[0] = [1E6*xp,0]; d3[0] = [1E6*xp,Ev0+Eg];
+      d4[0] = [1E6*xp,0]; d5[0] = [1E6*xp,na/1E21]; d6[0] = [1E6*xp,0]; 
+      d7.length = 0;
+      d7[0] = [1E6*xp,0]; d7[1] = [-1E6*(0.25*xp+tox),0];
+    }
+
+  document.getElementById('Vs_txt').innerHTML=(VIB).toPrecision(3);
+  document.getElementById('Vtmp_txt').innerHTML=(Vtmp + phi_m - phi_s).toPrecision(3);
+  document.getElementById('Q_txt').innerHTML=(Q).toPrecision(3);
+  document.getElementById('n0_txt').innerHTML=(d4[300][1]).toPrecision(3);
+  document.getElementById('Eox_txt').innerHTML=(Eox).toPrecision(3); 
+  document.getElementById('Es_txt').innerHTML=(Es).toPrecision(3); 
+
+//plot bands
+     // Define data for the plot
+     var data1 = [ 
+    { data: d3, color: "rgb(255,0,0)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(255,0,0)" }, label: "E<sub>c</sub>" },
+    { data: d1, color: "rgb(0,255,255)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(0,255,255)" }, label: "E<sub>v</sub>" },
+    { data: d2, color: "rgb(255,165,0)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(255,165,0)" }, label: "E<sub>F</sub>" }
+];
+
+// Plot the graph
+var plot = $.plot($("#placeholder1"), data1, {
+    grid: { hoverable: true, clickable: true },
+    xaxis: { axisLabel: "Voltage (V)" },
+    yaxis: { axisLabel: "Energy Levels" }
+});
+
+$("#placeholder1").bind("plothover", function (event, pos, item) {
+    if (item) {
+        $("#tooltip").html(item.series.label + "<br>V: " + item.datapoint[0].toFixed(2) + " V<br>E: " + item.datapoint[1].toFixed(2))
+            .css({ top: item.pageY + 5, left: item.pageX + 5 })
+            .fadeIn(200);
+    } else {
+        $("#tooltip").hide();
+    }
+});
+
+$(document).ready(function () {
+    $("body").append("<div id='tooltip' style='position: absolute; display: none; border: 1px solid #ccc; background: #fff; padding: 5px; font-size: 12px;'></div>");
+});
+
+
+
+
+
+
+MathJax.Hub.Queue(['Typeset',MathJax.Hub]);  //have Mathjax process the plot legends that were redrawn
+}
+
+</script>
+
+
+<style>
+p {margin-left:1cm; margin-right:1cm;}
+p.t {margin-left:0cm; margin-right:0cm;}
+h2 {margin-left:1cm;}
+</style>
+
+  
+  
+
+
+<div class="form-container">
+  <form name="data">
+    <table>
+      <tr>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϕ</mi><mi>m</mi></msub></math> =</td>
+        <td><input type="text" name="phi_m" size="10" value="4.08" spellcheck="false"></td>
+        <td>eV</td>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>χ</mi><mi>s</mi></msub></math> =</td>
+        <td><input type="text" name="chi_s" size="10" value="4.05" spellcheck="false"></td>
+        <td>eV</td>
+      </tr>
+      <tr>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>t</mi><mrow><mi>o</mi><mi>x</mi></mrow></msub></math> =</td>
+        <td><input type="text" name="tox" size="10" value="3" spellcheck="false"></td>
+        <td>nm</td>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϵ</mi><mrow><mi>o</mi><mi>x</mi></mrow></msub></math> =</td>
+        <td><input type="text" name="eps_ox" size="10" value="4" spellcheck="false"></td>
+        <td></td>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>c</mi></msub><mo>(</mo><mn>300</mn><mo>)</mo></math> =</td>
+        <td><input type="text" name="Nc" size="10" value="2.78E19" spellcheck="false"></td>
+        <td>1/cm³</td>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>T</mi></math> =</td>
+        <td><input type="text" name="T" size="10" value="300" spellcheck="false"></td>
+        <td>K</td>
+      </tr>
+      <tr>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>E</mi><mi>g</mi></msub></math> =</td>
+        <td><input type="text" name="Eg" size="25" value="1.166-4.73E-4*T*T/(T+636)" spellcheck="false"></td>
+        <td>eV</td>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϵ</mi><mrow><mi>s</mi><mi>e</mi><mi>m</mi><mi>i</mi></mrow></msub></math> =</td>
+        <td><input type="text" name="eps" size="10" value="12" spellcheck="false"></td>
+        <td></td>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>v</mi></msub><mo>(</mo><mn>300</mn><mo>)</mo></math> =</td>
+        <td><input type="text" name="Nv" size="10" value="9.84E18" spellcheck="false"></td>
+        <td>1/cm³</td>
+        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>A</mi></msub></math> =</td>
+        <td><input type="text" name="na" size="10" value="1E17" spellcheck="false"></td>
+        <td>1/cm³</td>
+      </tr>
+    </table>
+
+    <div class="button-group">
+      <div class="voltage-control">
+        <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi></math> = 
+        <input type="text" name="V" size="10" value="0" spellcheck="false"> V 
+        <input type="button" value="-" onclick="data.V.value = (parseFloat(data.V.value) - 0.01).toFixed(2); moscap();">
+        <input type="button" value="+" onclick="data.V.value = (parseFloat(data.V.value) + 0.01).toFixed(2); moscap();">
+      </div>
+      <input type="button" value="Submit" onclick="moscap();">
+    </div>
+
+    <div class="material-buttons">
+      <input type="button" value=" Si " onclick="setMaterial('Si');">
+      <input type="button" value=" Ge " onclick="setMaterial('Ge');">
+      <input type="button" value="GaAs" onclick="setMaterial('GaAs');">
+    </div>
+
+    <div class="button-group">
+      <input type="button" value="Accumulation" onclick="setVoltage(Vfb - 0.2);">
+      <input type="button" value="Flatband" onclick="setVoltage(Vfb);">
+      <input type="button" value="Depletion" onclick="setVoltage(0.5 * (VT + 2 * Vfb));">
+      <input type="button" value="Threshold" onclick="setVoltage(VT + Vfb);">
+      <input type="button" value="Inversion" onclick="setVoltage(VT + Vfb + 0.2);">
+    </div>
+  </form>
+</div>
+
+<script>
+  function setMaterial(material) {
+    const materials = {
+      Si: {
+        Nc: '2.78E19',
+        Nv: '9.84E18',
+        chi_s: '4.05',
+        Eg: '1.166 - (4.73E-4 * T * T) / (T + 636)'
+      },
+      Ge: {
+        Nc: '1.04E19',
+        Nv: '6.0E18',
+        chi_s: '4.0',
+        Eg: '0.7437 - (4.77E-4 * T * T) / (T + 235)'
+      },
+      GaAs: {
+        Nc: '4.45E17',
+        Nv: '7.72E18',
+        chi_s: '4.07',
+        Eg: '1.519 - (5.41E-4 * T * T) / (T + 204)'
+      }
+    };
+
+    const { Nc, Nv, chi_s, Eg } = materials[material];
+    data.Nc.value = Nc;
+    data.Nv.value = Nv;
+    data.chi_s.value = chi_s;
+    data.Eg.value = Eg;
+    moscap();
+  }
+
+  function setVoltage(value) {
+    data.V.value = value;
+    moscap();
+  }
+</script>
+
+<table align="center"><tbody><tr><td>
+
+<p style="text-align:center"><b>Band diagram</b></p>
+
+<table align="center">
+    <tbody>
+        <tr>
+            <td>
+                <p style="text-align:center;">Energy<br>[eV]</p>
+            </td>
+            <td>
+                <div id="placeholder1" style="width: 400px; height: 300px; position: relative;">
+                    <canvas class="flot-base" width="400" height="300"></canvas>
+                    <canvas class="flot-overlay" width="400" height="300" style="position: absolute; left: 0; top: 0;"></canvas>
+                    <div class="flot-text" style="position: absolute; inset: 0; font-size: smaller; color: #545454;">
+                        <div class="flot-x-axis xAxis" style="position: absolute; inset: 0; display: block;">
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 62px; text-align: center;">0.00</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 138px; text-align: center;">0.05</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 214px; text-align: center;">0.10</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 290px; text-align: center;">0.15</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 366px; text-align: center;">0.20</div>
+                        </div>
+                        <div class="flot-y-axis yAxis" style="position: absolute; inset: 0; display: block;">
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 269px; left: 2px; text-align: right;">-2.5</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 235px; left: 2px; text-align: right;">-2.0</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 202px; left: 2px; text-align: right;">-1.5</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 168px; left: 2px; text-align: right;">-1.0</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 135px; left: 2px; text-align: right;">-0.5</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 101px; left: 6px; text-align: right;">0.0</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 67px; left: 6px; text-align: right;">0.5</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 34px; left: 6px; text-align: right;">1.0</div>
+                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 0; left: 6px; text-align: right;">1.5</div>
+                        </div>
+                    </div>
+                    <div class="legend" style="position: absolute; top: 13px; right: 19px; background-color: rgba(255, 255, 255, 0.85);">
+                        <table style="font-size: smaller; color: #545454;">
+                            <tbody>
+                                <tr>
+                                    <td class="legendColorBox" style="padding: 1px;">
+                                        <div style="border: 1px solid #ccc;">
+                                            <div style="width: 4px; height: 0; border: 5px solid rgb(255, 0, 0); overflow: hidden;"></div>
+                                        </div>
+                                    </td>
+                                    <td class="legendLabel">E<sub>c</sub></td>
+                                </tr>
+                                <tr>
+                                    <td class="legendColorBox" style="padding: 1px;">
+                                        <div style="border: 1px solid #ccc;">
+                                            <div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 255); overflow: hidden;"></div>
+                                        </div>
+                                    </td>
+                                    <td class="legendLabel">E<sub>v</sub></td>
+                                </tr>
+                                <tr>
+                                    <td class="legendColorBox" style="padding: 1px;">
+                                        <div style="border: 1px solid #ccc;">
+                                            <div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 0); overflow: hidden;"></div>
+                                        </div>
+                                    </td>
+                                    <td class="legendLabel">E<sub>F</sub></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <p style="text-align:center;"><i>x</i> [μm]</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+</td><td>
+
+  <div class="table-container">
+    <table>
+      <tbody>
+        <tr>
+          <td>
+            <p>
+              <span class="math">E<sub>g</sub> =</span>
+              <span id="Eg_txt" class="value">1.12</span>&nbsp;eV
+            </p>
+          </td>
+          <td>
+            <p>
+              <span class="math">n<sub>i</sub> =</span>
+              <span id="ni_txt" class="value">6.40e+9</span>&nbsp;1/cm³
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <span class="math">E<sub>s</sub> =</span>
+              <span id="Es_txt" class="value">1.57e+7</span>&nbsp;V/m
+            </p>
+          </td>
+          <td>
+            <p>
+              <span class="math">V<sub>s</sub> =</span>
+              <span id="Vs_txt" class="value">0.831</span>&nbsp;V
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <span class="math">Q =</span>
+              <span id="Q_txt" class="value">-0.00167</span>&nbsp;C/m²
+            </p>
+          </td>
+          <td>
+            <p>
+              <span class="math">n(x=0) =</span>
+              <span id="n0_txt" class="value">37.2</span>&nbsp;×&nbsp;10<sup>15</sup>&nbsp;1/cm³
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <span class="math">E<sub>ox</sub> =</span>
+              <span id="Eox_txt" class="value">4.70e+7</span>&nbsp;V/m
+            </p>
+          </td>
+          <td>
+            <p>
+              <span class="math">V<sub>shoot</sub> =</span>
+              <span id="Vtmp_txt" class="value">0.0000221</span>&nbsp;V
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="flex-container">
+              <span class="math">$$\phi_s =$$</span>
+              <span id="phi_s_txt" class="value">5.05</span> eV
+            </div>
+          </td>
+          <td>
+            <div class="flex-container">
+              <span class="math">$$V_{fb} = \phi_m - \phi_s =$$</span>
+              <span id="Vfb_txt" class="value">-0.972</span> V
+            </div>
+          </td>
+        </tr>
+        <tr><td colspan="2">&nbsp;</td></tr>
+        <tr><td colspan="2"><p class="center-text">From the depletion approximation:</p></td></tr>
+        <tr>
+          <td>
+            <p>
+              <span class="math">max (x<sub>p</sub>) =</span>
+              <span id="xp_txt" class="value">0.107</span>&nbsp;μm
+            </p>
+          </td>
+          <td>
+            <p>
+              <span class="math">V<sub>T</sub> =</span>
+              <span id="VT_txt" class="value">0.0292</span>&nbsp;V
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p>
+              <span class="math">E<sub>s</sub> =</span>
+              <span id="Es0_txt" class="value">1.58e+7</span>&nbsp;V/m
+            </p>
+          </td>
+          <td>
+            <p>
+              <span class="math">V<sub>s</sub> =</span>
+              <span id="VIB0_txt" class="value">0.830</span>&nbsp;V
+            </p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</td></tr></tbody></table>
+
+
+
+</div>
+   <!--simulation end -->
+  	 
+</body><!--body tag end-->
+</html><!--html tag end-->

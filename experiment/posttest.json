@@ -1,39 +1,117 @@
-{
-  "version": 2.0,
+
+  {
+	  "version": 2.0,
   "questions": [
-    {
-      "question": "This is a Sample Question 1?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
+      {
+    "question": "1. What is the primary equation used in the SPICE model for the forward I-V characteristic of a diode, neglecting non-ideal effects?",
+    "answers": {
+      "a": "$I_D = I_S \\cdot (e^{\\frac{V_D}{N \\cdot V_T}} - 1)$",
+      "b": "$I_D = I_S \\cdot e^{\\frac{V_D}{V_T}}$",
+      "c": "$V_D = I_D \\cdot R_S$",
+      "d": "$I_D = \\frac{V_D}{R_S} \\cdot (1 - e^{\\frac{V_D}{N \\cdot V_T}})$"
     },
-    {
-      "question": "This is a Sample Question 2?",
-      "answers": {
-        "a": "answer1",
-        "b": "answer2",
-        "c": "answer3",
-        "d": "answer4"
-      },
-      "explanations": {
-        "a": "Explanation 1  <a href='www.google.com'>here</a>",
-        "b": "Explanation 2",
-        "c": "Explanation 2",
-        "d": "Explanation 2"
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
-    }
+    "correctAnswer": "a",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "2. In the SPICE diode model, what does the ideality factor 'N' primarily account for?",
+    "answers": {
+      "a": "Only the diffusion current in the quasi-neutral regions.",
+      "b": "The effect of series resistance at high currents.",
+      "c": "The combination of diffusion (N=1) and space-charge region recombination (N=2) currents.",
+      "d": "The breakdown voltage in reverse bias."
+    },
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "3. How is the saturation current 'IS' typically extracted from a forward I-V plot?",
+    "answers": {
+      "a": "By measuring the current at a fixed voltage of 0.7V.",
+      "b": "By finding the slope of the linear $I_D$ vs. $V_D$ curve.",
+      "c": "By extrapolating the linear region of the $log(I_D)$ vs. $V_D$ plot back to the $V_D = 0$ intercept.",
+      "d": "By measuring the current just before breakdown."
+    },
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "4. At high forward currents, the measured I-V curve 'rolls off' and deviates from the ideal exponential behavior. What SPICE parameter is primarily responsible for this?",
+    "answers": {
+      "a": "$N$ (Ideality Factor)",
+      "b": "$IS$ (Saturation Current)",
+      "c": "$RS$ (Series Resistance)",
+      "d": "$BV$ (Breakdown Voltage)"
+    },
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "5. The ideality factor 'N' is extracted from the slope of which plot, in the ideal region?",
+    "answers": {
+      "a": "$I_D$ vs. $V_D$ on a linear scale.",
+      "b": "$log(I_D)$ vs. $V_D$ on a semi-log scale.",
+      "c": "$log(I_D)$ vs. $log(V_D)$ on a log-log scale.",
+      "d": "$dV_D / d(log(I_D))$ vs. $I_D$."
+    },
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "6. What does the SPICE parameter 'IKF' (High-injection knee current) model?",
+    "answers": {
+      "a": "The onset of avalanche breakdown.",
+      "b": "The current level where series resistance $RS$ begins to dominate.",
+      "c": "The decrease in emission coefficient (ideality factor trends towards 2) due to high-level injection.",
+      "d": "The current level where recombination in the space-charge region is dominant."
+    },
+    "correctAnswer": "c",
+    "difficulty": "advanced"
+  },
+  {
+    "question": "7. If the series resistance 'RS' is NOT properly accounted for, how will it affect the extracted value of the ideality factor 'N' from the I-V curve?",
+    "answers": {
+      "a": "The extracted 'N' will be lower than the true value.",
+      "b": "The extracted 'N' will appear to increase as current increases.",
+      "c": "The extracted 'N' will be unaffected, as 'RS' is a separate parameter.",
+      "d": "The extracted 'N' will become negative."
+    },
+    "correctAnswer": "b",
+    "difficulty": "advanced"
+  },
+  {
+    "question": "8. On a $log(I_D)$ vs. $V_D$ plot, what physical effect typically dominates at the *lowest* forward currents, often showing N ≈ 2?",
+    "answers": {
+      "a": "High-level injection.",
+      "b": "Ohmic series resistance.",
+      "c": "Ideal diffusion current.",
+      "d": "Recombination current in the space-charge region."
+    },
+    "correctAnswer": "d",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "9. The SPICE parameter 'XTI' models the temperature dependence of which other key parameter?",
+    "answers": {
+      "a": "$RS$ (Series Resistance)",
+      "b": "$N$ (Ideality Factor)",
+      "c": "$IS$ (Saturation Current)",
+      "d": "$CJO$ (Zero-bias capacitance)"
+    },
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "10. A common method to extract 'RS' is to plot $V_D - N \\cdot V_T \\cdot ln(I_D / I_S)$ vs. $I_D$, after 'N' and 'IS' are found. What should this plot ideally yield?",
+    "answers": {
+      "a": "A constant value equal to $IS$.",
+      "b": "A straight line passing through the origin with a slope of $RS$.",
+      "c": "A straight line with a slope of $N$.",
+      "d": "A horizontal line at $V_T$."
+    },
+    "correctAnswer": "b",
+    "difficulty": "advanced"
+  }
+
   ]
 }
