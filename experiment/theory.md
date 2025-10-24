@@ -1,63 +1,104 @@
 ## Theory
 **Introduction:**  
-The boundary between accumulation and depletion is the flat-band voltage and the boundary between depletion and inversion is the threshold voltage.
+The primary goal of parameter extraction is to find the values for a set of model parameters that allow the SPICE (Simulation Program with Integrated Circuit Emphasis) equations to accurately replicate the measured current-voltage (I-V) data of a real diode.
 <div align="center">
     <img src="images/tvic.jpg" alt="Threshold Voltage and Inversion charge">  
       <p><strong>Fig. 1. Threshold Voltage and Inversion charge</strong></p>
 </div>
 
+### The SPICE Diode Model for Forward Bias
 
+For the forward-bias DC characteristic, the total applied voltage ($V_D$) across the diode's terminals is the sum of the voltage across the internal ideal p-n junction ($V_j$) and the voltage dropped across the parasitic series resistance ($V_{RS}$).
 
-  
+$$V_D = V_j + V_{RS} = V_j + I_D \cdot RS$$
 
-### MOS Capacitor's three regimes-Accumulation, Depletion, Inversion
+The current ($I_D$) flowing through the diode is described by a modified version of the Shockley equation. The most critical SPICE parameters to extract for the forward I-V curve are:
 
-A MOS Capacitor can be in three regimes: accumulation, depletion, and inversion. The boundary between accumulation and depletion is the flat-band voltage, and the boundary between depletion and inversion is the threshold voltage. The flat-band voltage, denoted as V<sub>fb</sub> or V<sub>bi</sub>, is defined as φ<sub>m</sub> - φ<sub>s</sub>, where φ<sub>m</sub> is the work function of the metal and φ<sub>s</sub> is the work function of the semiconductor substrate.
+* **$IS$ (Saturation Current):** The theoretical reverse-bias saturation current, primarily due to diffusion.
+* **$N$ (Ideality Factor):** An empirical parameter (also called the emission coefficient) that accounts for the dominant current mechanism. $N \approx 1$ for ideal diffusion, and $N \approx 2$ for space-charge region recombination.
+* **$RS$ (Series Resistance):** The parasitic ohmic resistance from the semiconductor bulk material, metal contacts, and package leads.
 
-At the flat-band voltage, the bands are flat, resulting in an electric field of zero throughout the semiconductor. The hole concentration p equals the acceptor concentration, and the charge density ρ is zero.
+More advanced models also include parameters for low-current and high-current non-idealities:
 
-Accumulation occurs when the gate voltage V is negative, attracting holes to the oxide interface. This causes the valence band to bend up towards the Fermi energy, increasing the hole concentration p near the oxide interface. The Fermi energy in the metal (represented by the black line on the left in the band diagram) moves up for negative voltages, indicating an increase in electron energy.
+* **$ISR$ (Recombination Saturation Current):** A separate saturation current for the non-ideal recombination component that dominates at low bias.
+* **$NR$ (Recombination Ideality Factor):** The ideality factor for $ISR$, typically fixed at 2.
+* **$IKF$ (High-Injection Knee Current):** The forward current at which high-level injection effects become significant, causing the ideality factor to increase.
 
-In the depletion regime, a positive gate voltage pushes mobile holes away from the oxide, leaving negatively charged acceptors behind. The valence band bends away from the Fermi energy at the oxide, resulting in a lower hole concentration near the oxide. The negative charge in the semiconductor is balanced by a positive charge on the metal surface, as indicated by the charge plot arrow. As the gate voltage increases positively, the depletion width grows, and the bands bend further down. Eventually, the conduction band gets closer to the Fermi energy than the valence band, leading to weak inversion where n > p near the oxide. Strong inversion occurs when n = N<sub>A</sub> (acceptor concentration) at the oxide interface, at the threshold voltage V<sub>T</sub>.
+---
 
-At V > V<sub>T</sub>, an inversion channel forms at the semiconductor/oxide interface, characterized by a layer of mobile electrons. In the inversion state, the electric field in the semiconductor remains constant, while it increases within the oxide layer.
+### I-V Curve Regions and Parameter Dominance
 
-### Determining the band bending
-
-To calculate the band bending, we start with Gauss's law,
-
-$$\\begin{equation} \\nabla \\cdot \\vec{E} = \\frac{\\rho}{\\epsilon\_s\\epsilon\_0}. \\end{equation}$$
-
-$$Combining \ this \ with \ \\vec{E}=-\\nabla V \ yields \ the \ Poisson \ equation,$$
-
-$$\\begin{equation} \\nabla^2V = -\\frac{\\rho}{\\epsilon\_s\\epsilon\_0}, \\end{equation}$$
-
-where, for a MOS capacitor with a p-type substrate, the charge density is 
-$$\\rho = e\\left(-N\_A-n+p\\right)$$ and the charge carrier concentrations are,
-
-
-$$\\begin{equation} n=N\_c(300)\\left(\\frac{T}{300}\\right)^{3/2}\\exp\\left(\\frac{E\_F-E\_c}{k\_BT}\\right)\\qquad \\text{and}\\qquad p=N\_v(300)\\left(\\frac{T}{300}\\right)^{3/2}\\exp\\left(\\frac{E\_v-E\_F}{k\_BT}\\right). \\end{equation}$$
-
-Using the relation $$e\\frac{dV}{dx} = -\\frac{E\_v}{dx}$$ the Poisson equation can be written as a second order differential equation for E<sub>v(x)</sub>,
-
-$$ \\begin{equation} \\frac{d^2E\_v}{dx^2} = \\frac{e^2}{\\epsilon\_s\\epsilon\_0}\\left(-N\_A-N\_c\\exp\\left(\\frac{-E\_g-E\_v}{k\_BT}\\right)+N\_v\\exp\\left(\\frac{E\_v}{k\_BT}\\right)\\right). \\end{equation}$$
-
-### Numerical
-
-This differential equation was solved numerically using the shooting method. First the maximum depletion width max(x<sub>p</sub>) and the threshold voltage V<sub>T</sub> are estimated using the analytic formulas from the depletion approximation.
+A typical diode forward I-V curve, when plotted on a semi-log scale ($log(I_D)$ vs. $V_D$), can be divided into three distinct regions, each dominated by different physical effects and parameters.
 
 
 
-$$\\begin{equation} x\_p = 2\\sqrt{\\frac{\\epsilon\_{\\text{semi}}\\epsilon\_0 k\_BT}{e^2N\_A}\\ln\\left(\\frac{N\_A}{n\_i}\\right)}. \\end{equation}$$ 
+1.  **Low-Current Region (Recombination-Dominated):**
+    * At very low forward voltages, the current is dominated by the recombination of electrons and holes within the space-charge region.
+    * This current is modeled using the $ISR$ and $NR$ parameters, and the curve has a slope corresponding to an ideality factor $N \approx 2$.
 
-$$\\begin{equation} V\_T = \\frac{2t\_{ox}}{\\epsilon\_{ox}}\\sqrt{\\epsilon\_{\\text{semi}}N\_Ak\_BT \\ln \\left (\\frac{N\_A}{n\_i} \\right )} +\\frac{2k\_BT}{e} \\ln \\left (\\frac{N\_A}{n\_i} \\right ) +V\_{fb} \\end{equation}$$
+2.  **Mid-Current Region (Diffusion-Dominated):**
+    * As the voltage increases, the ideal diffusion current (modeled by $IS$ and $N$) becomes dominant.
+    * On the $log(I_D)$ vs. $V_D$ plot, this region appears as a straight line.
+    * The behavior here is described by the ideal Shockley equation: $I_D \approx IS \cdot e^{\frac{V_j}{N \cdot V_T}}$.
+    * $V_T$ is the thermal voltage, $kT/q$, which is $\approx 25.9 \text{ mV}$ at 300K (room temperature).
 
-Far from the oxide, the valence band satisfies the conditions $$E_v=k_BTln(N_AN_v)=E_{v0}E_v=k_BTln⁡(\frac{N_A}{N_v})=E_{v0}$$ and $$dE_vdx=0\frac{dE_v}{dx}=0$$. To determine the band bending, we start a distance of 1.8x<sub>p</sub> from the oxide with $$E\_{v} = k\_BT\\ln\\left(\\frac{N\_A}{N\_v}\\right)=E\_{v0}$$ and a small value of $$dE_vdx=0\frac{dE_v}{dx}=0$$. The Poisson equation is integrated numerically using the midpoint method until the semiconductor oxide interface. This gives us the voltage V<sub>s</sub> at the semiconductor/oxide interface and the electric field E<sub>s</sub> at that point. The voltage on the gate is,
+3.  **High-Current Region (Series Resistance & High-Injection):**
+    * At high forward voltages, two effects become dominant:
+        * **Series Resistance ($RS$):** The voltage drop across $RS$ ($I_D \cdot RS$) becomes a significant portion of the total applied voltage $V_D$. This "robs" the internal junction of voltage, causing the $log(I_D)$ curve to bend and "roll off" from its straight-line path.
+        * **High-Level Injection ($IKF$):** The concentration of injected minority carriers approaches the majority carrier doping concentration. This effect also causes the curve to bend (ideality factor trends towards 2).
 
+---
 
-$$\\begin{equation} V = \\frac{\\epsilon\_{\\text{semi}}E\_s}{\\epsilon\_{\\text{ox}}}t\_{\\text{ox}}+V\_s. \\end{equation}$$
+### Graphical Extraction Methods
 
-This is the correct gate voltage for the boundary conditions we chose on the right, but generally, it may not be the desired gate voltage. The starting position of integration is then adjusted either to the right or left, and the integration process is repeated until the calculated voltage, obtained through numerical integration, matches V<sub>shoot</sub>. The simulation produces incorrect results if the valence band or conduction band approach within approximately 3k<sub>BT</sub> from the Fermi energy. This limitation arises because the formulas for nnn and ppp are valid only when the valence and conduction bands are sufficiently far from the Fermi energy.
+The simplest extraction techniques rely on analyzing the $log(I_D)$ vs. $V_D$ plot in these distinct regions.
+
+#### 1. Extracting $N$ (Ideality Factor) and $IS$ (Saturation Current)
+
+These parameters are extracted from the **linear mid-current region** of the $log(I_D)$ vs. $V_D$ plot.
+
+* **Ideality Factor ($N$):** The slope of this linear region is used to find $N$. From the diode equation, we can write:
+    $$log(I_D) = log(IS) + \frac{V_j}{N \cdot V_T}$$
+    Assuming $V_j \approx V_D$ in this region (where $RS$ effects are small) and using $log_{10}$, the slope is:
+    $$\text{Slope} = \frac{\Delta log_{10}(I_D)}{\Delta V_D} = \frac{1}{N \cdot V_T \cdot ln(10)}$$
+    By measuring the slope from the graph and knowing $V_T$, we can solve for $N$:
+    $$N = \frac{1}{\text{Slope} \cdot V_T \cdot ln(10)}$$
+
+* **Saturation Current ($IS$):** Once $N$ is known, $IS$ can be found by extrapolating the linear mid-current region back to the $V_D = 0$ axis.
+    * The y-intercept of this extrapolated line is $log_{10}(IS)$.
+    * Therefore, **$IS = 10^{\text{intercept}}$**.
+
+#### 2. Extracting $RS$ (Series Resistance)
+
+$RS$ is extracted from the **high-current region** where the curve deviates from the ideal straight line.
+
+* **Method 1: High-Current Slope (Approximation)**
+    At very high currents, the device behaves more like a resistor. The dynamic resistance $r_d = dV_D / dI_D$ is measured from the linear I-V plot (not the log plot) at the highest current. This dynamic resistance approaches the series resistance:
+    $$r_d = \frac{dV_D}{dI_D} \approx RS$$
+
+* **Method 2: Voltage Difference**
+    Pick a point ($V_{D, high}, I_{D, high}$) in the high-current region. Find the corresponding voltage $V_{ideal}$ on the extrapolated ideal line (from the mid-current region) for the same current $I_{D, high}$. The difference between these voltages is the drop across $RS$.
+    $$V_{RS} = V_{D, high} - V_{ideal} = I_{D, high} \cdot RS$$
+    Therefore, **$RS = (V_{D, high} - V_{ideal}) / I_{D, high}$**.
+
+* **Method 3: Differential Plot (Advanced)**
+    A more robust method is to plot a function like $H(I_D) = V_D - N \cdot V_T \cdot ln(I_D / IS)$ vs. $I_D$, using the $N$ and $IS$ found earlier. This plot should ideally be a straight line with a slope equal to $RS$.
+
+---
+
+### Numerical Optimization (Curve Fitting)
+
+Graphical methods are simple but have limitations, as the parameters are not truly independent. The modern and most accurate approach is **numerical optimization**.
+
+1.  **Define a Model:** The full SPICE equation is used, combining all parameters:
+    $$I_D = IS \cdot \left(e^{\frac{V_D - I_D \cdot RS}{N \cdot V_T}} - 1\right) + ISR \cdot \left(e^{\frac{V_D - I_D \cdot RS}{NR \cdot V_T}} - 1\right)$$
+    (This is a simplified representation; the full model also includes $IKF$).
+
+2.  **Define an Error Function:** An error function (e.g., sum of squared errors) is defined to quantify the difference between the measured current ($I_{meas}$) and the calculated model current ($I_{model}$) at each measured voltage point $V_D$.
+    $$\text{Error} = \sum_{i} \left[ \log(I_{meas, i}) - \log(I_{model}(V_{D, i}, IS, N, RS, ...)) \right]^2$$
+    (Fitting the log of the current is common to give equal weight to all current decades).
+
+3.  **Optimize:** A numerical algorithm (like Levenberg-Marquardt) iteratively adjusts the parameters ($IS$, $N$, $RS$, etc.) to **minimize the total error**. This "best-fit" set of parameters is the one that makes the model equation most closely match the real-world data across the entire I-V curve.
 
  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>    
  
