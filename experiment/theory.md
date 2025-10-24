@@ -2,7 +2,7 @@
 **Introduction:**  
 The primary goal of parameter extraction is to find the values for a set of model parameters that allow the SPICE (Simulation Program with Integrated Circuit Emphasis) equations to accurately replicate the measured current-voltage (I-V) data of a real diode.
 <div align="center">
-    <img src="images/tvic.jpg" alt="Threshold Voltage and Inversion charge">  
+    <img src="images/th1.png" alt="Threshold Voltage and Inversion charge">  
       <p><strong>Fig. 1. Threshold Voltage and Inversion charge</strong></p>
 </div>
 
