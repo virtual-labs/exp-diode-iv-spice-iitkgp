@@ -6,8 +6,8 @@
 
 <b>Discipline | <b> Electronic Engineering 
 :--|:--|
-<b> Lab | <b> **Microelectronics and VLSI Engineering Laboratory**
-<b> Experiment|     <b> **PMOS Capacitor Band Diagram**
+<b> Lab | <b> **Technology CAD Laboratory**
+<b> Experiment|     <b> **Extraction of diode SPICE parameters related to forward Current-Voltage (I-V) characteristics**
 
 
 ### About the Experiment 
