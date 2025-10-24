@@ -9,7 +9,7 @@
 4) Paolo A. A. N. D. L. M. G., "Parameter Extraction," in Power Diode Design and Fabrication, Springer, 2021. (A more modern text that includes sections on parameter extraction, often using numerical and optimization methods.)
 
 #### Video Lectures
-- [Diode Parameter Extraction](https://www.youtube.com/watch?v=R-s-EeK0ZNs)
-- [How to extract Diode parameters from I-V curve in Origin](https://www.youtube.com/watch?v=pYg-5-i1kOM)
-- [Semiconductor Device Modeling - Lecture 11: SPICE Diode Model](https://www.youtube.com/watch?v=QyF-e-wLRgU)
+- [Diode Parameter Extraction](https://www.youtube.com/watch?v=mrBHf_9P9YQ)
+- [How to extract Diode parameters from I-V curve](https://www.youtube.com/watch?v=8laNV6d3zkU)
+- [Semiconductor Device Modeling - Lecture 11: SPICE Diode Model](https://www.youtube.com/watch?v=0nu65r1Xe8Y&list=PLbMVogVj5nJQ2k2HAGHFENB4a2nI8OppN)
 
