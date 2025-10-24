@@ -2,115 +2,116 @@
   {
 	  "version": 2.0,
   "questions": [
-    {
-      "question": "1. What does the Gummel plot method characterize in a BJT?",
-      "answers": {
-        "a": "Voltage gain",
-        "b": "Current gain",
-        "c": "Power gain",
-        "d": "Frequency gain"
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
+      {
+    "question": "1. What is the primary equation used in the SPICE model for the forward I-V characteristic of a diode, neglecting non-ideal effects?",
+    "answers": {
+      "a": "$I_D = I_S \\cdot (e^{\\frac{V_D}{N \\cdot V_T}} - 1)$",
+      "b": "$I_D = I_S \\cdot e^{\\frac{V_D}{V_T}}$",
+      "c": "$V_D = I_D \\cdot R_S$",
+      "d": "$I_D = \\frac{V_D}{R_S} \\cdot (1 - e^{\\frac{V_D}{N \\cdot V_T}})$"
     },
-    {
-      "question": "2. The Gummel plot is used to analyze the relationship between which of the following parameters?",
-      "answers": {
-        "a": "Base-emitter voltage (V_BE) and collector current (I_C)",
-        "b": "Base current (I_B) and collector current (I_C)",
-        "c": "Emitter current (I_E) and base current (I_B)",
-        "d": "Base-emitter voltage (V_BE) and base current (I_B)"
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
+    "correctAnswer": "a",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "2. In the SPICE diode model, what does the ideality factor 'N' primarily account for?",
+    "answers": {
+      "a": "Only the diffusion current in the quasi-neutral regions.",
+      "b": "The effect of series resistance at high currents.",
+      "c": "The combination of diffusion (N=1) and space-charge region recombination (N=2) currents.",
+      "d": "The breakdown voltage in reverse bias."
     },
-    {
-      "question": "3. What is typically plotted on the y-axis in a Gummel plot?",
-      "answers": {
-        "a": "Base current (I_B)",
-        "b": "Collector current (I_C)",
-        "c": "Base-emitter voltage (V_BE)",
-        "d": "Saturation current (I_S)"
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "3. How is the saturation current 'IS' typically extracted from a forward I-V plot?",
+    "answers": {
+      "a": "By measuring the current at a fixed voltage of 0.7V.",
+      "b": "By finding the slope of the linear $I_D$ vs. $V_D$ curve.",
+      "c": "By extrapolating the linear region of the $log(I_D)$ vs. $V_D$ plot back to the $V_D = 0$ intercept.",
+      "d": "By measuring the current just before breakdown."
     },
-    {
-      "question": "4. In the Gummel plot, the relationship between collector current (I_C) and base-emitter voltage (V_BE) shows what type of relationship?",
-      "answers": {
-        "a": "Exponential",
-        "b": "Linear",
-        "c": "Quadratic",
-        "d": "Logarithmic"
-      },
-      "correctAnswer": "a",
-      "difficulty": "intermediate"
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "4. At high forward currents, the measured I-V curve 'rolls off' and deviates from the ideal exponential behavior. What SPICE parameter is primarily responsible for this?",
+    "answers": {
+      "a": "$N$ (Ideality Factor)",
+      "b": "$IS$ (Saturation Current)",
+      "c": "$RS$ (Series Resistance)",
+      "d": "$BV$ (Breakdown Voltage)"
     },
-    {
-      "question": "5. What does the slope of the collector current (I_C) versus base-emitter voltage (V_BE) plot represent?",
-      "answers": {
-        "a": "Saturation current (I_S)",
-        "b": "Current gain (\u03b2)",
-        "c": "Emitter efficiency",
-        "d": "Thermal voltage (V_T)"
-      },
-      "correctAnswer": "a",
-      "difficulty": "intermediate"
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "5. The ideality factor 'N' is extracted from the slope of which plot, in the ideal region?",
+    "answers": {
+      "a": "$I_D$ vs. $V_D$ on a linear scale.",
+      "b": "$log(I_D)$ vs. $V_D$ on a semi-log scale.",
+      "c": "$log(I_D)$ vs. $log(V_D)$ on a log-log scale.",
+      "d": "$dV_D / d(log(I_D))$ vs. $I_D$."
     },
-    {
-      "question": "6. How does the Gummel plot help in BJT characterization?",
-      "answers": {
-        "a": "By measuring thermal resistance",
-        "b": "By extracting parameters like saturation current and current gain",
-        "c": "By measuring power dissipation",
-        "d": "By analyzing frequency response"
-      },
-      "correctAnswer": "b",
-      "difficulty": "intermediate"
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "6. What does the SPICE parameter 'IKF' (High-injection knee current) model?",
+    "answers": {
+      "a": "The onset of avalanche breakdown.",
+      "b": "The current level where series resistance $RS$ begins to dominate.",
+      "c": "The decrease in emission coefficient (ideality factor trends towards 2) due to high-level injection.",
+      "d": "The current level where recombination in the space-charge region is dominant."
     },
-    {
-      "question": "7. What parameter of a BJT is directly related to the ideality factor in the Gummel plot?",
-      "answers": {
-        "a": "Saturation current (I_S)",
-        "b": "Base-emitter voltage (V_BE)",
-        "c": "Emitter efficiency",
-        "d": "Thermal voltage (V_T)"
-      },
-      "correctAnswer": "a",
-      "difficulty": "advanced"
+    "correctAnswer": "c",
+    "difficulty": "advanced"
+  },
+  {
+    "question": "7. If the series resistance 'RS' is NOT properly accounted for, how will it affect the extracted value of the ideality factor 'N' from the I-V curve?",
+    "answers": {
+      "a": "The extracted 'N' will be lower than the true value.",
+      "b": "The extracted 'N' will appear to increase as current increases.",
+      "c": "The extracted 'N' will be unaffected, as 'RS' is a separate parameter.",
+      "d": "The extracted 'N' will become negative."
     },
-    {
-      "question": "8. How can you determine the current gain (\u03b2) of a BJT from the Gummel plot?",
-      "answers": {
-        "a": "By calculating the slope of the base current (I_B) versus base-emitter voltage (V_BE) plot",
-        "b": "By calculating the slope of the collector current (I_C) versus base-emitter voltage (V_BE) plot",
-        "c": "By dividing base current (I_B) by collector current (I_C)",
-        "d": "By dividing collector current (I_C) by base current (I_B)"
-      },
-      "correctAnswer": "b",
-      "difficulty": "advanced"
+    "correctAnswer": "b",
+    "difficulty": "advanced"
+  },
+  {
+    "question": "8. On a $log(I_D)$ vs. $V_D$ plot, what physical effect typically dominates at the *lowest* forward currents, often showing N ≈ 2?",
+    "answers": {
+      "a": "High-level injection.",
+      "b": "Ohmic series resistance.",
+      "c": "Ideal diffusion current.",
+      "d": "Recombination current in the space-charge region."
     },
-    {
-      "question": "9. What does the term 'early effect' refer to in the context of BJTs?",
-      "answers": {
-        "a": "Temperature dependence of collector current",
-        "b": "Voltage dependence of base current",
-        "c": "Voltage dependence of collector current",
-        "d": "Temperature dependence of base current"
-      },
-      "correctAnswer": "c",
-      "difficulty": "advanced"
+    "correctAnswer": "d",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "9. The SPICE parameter 'XTI' models the temperature dependence of which other key parameter?",
+    "answers": {
+      "a": "$RS$ (Series Resistance)",
+      "b": "$N$ (Ideality Factor)",
+      "c": "$IS$ (Saturation Current)",
+      "d": "$CJO$ (Zero-bias capacitance)"
     },
-    {
-      "question": "10. In the Gummel plot, the linear region where the base current (I_B) is proportional to base-emitter voltage (V_BE) is known as the ______ region.",
-      "answers": {
-        "a": "Saturation",
-        "b": "Active",
-        "c": "Cut-off",
-        "d": "Breakdown"
-      },
-      "correctAnswer": "b",
-      "difficulty": "advanced"
-    }
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "10. A common method to extract 'RS' is to plot $V_D - N \\cdot V_T \\cdot ln(I_D / I_S)$ vs. $I_D$, after 'N' and 'IS' are found. What should this plot ideally yield?",
+    "answers": {
+      "a": "A constant value equal to $IS$.",
+      "b": "A straight line passing through the origin with a slope of $RS$.",
+      "c": "A straight line with a slope of $N$.",
+      "d": "A horizontal line at $V_T$."
+    },
+    "correctAnswer": "b",
+    "difficulty": "advanced"
+  }
+
   ]
 }
