@@ -1,115 +1,117 @@
   {
 	  "version": 2.0,
   "questions": [
-    {
-      "question": "1. What does the term 'Gummel plot' specifically refer to in the context of BJT characterization?",
-      "answers": {
-        "a": "A plot of base-emitter voltage (V_BE) versus collector current (I_C)",
-        "b": "A plot of base current (I_B) versus base-emitter voltage (V_BE)",
-        "c": "A plot of collector current (I_C) versus base current (I_B)",
-        "d": "A plot of base-emitter voltage (V_BE) versus base current (I_B)"
-      },
-      "correctAnswer": "b",
-      "difficulty": "beginner"
+    
+  {
+    "question": "1. What is the primary role of the SPICE parameter $EG$ (Energy Gap) in the diode model?",
+    "answers": {
+      "a": "It determines the reverse breakdown voltage.",
+      "b": "It sets the value of the ideality factor $N$.",
+      "c": "It is used to calculate the temperature dependence of the saturation current $IS$.",
+      "d": "It models the series resistance $RS$."
     },
-    {
-      "question": "2. In a Gummel plot, what does the slope of the base current (I_B) versus base-emitter voltage (V_BE) plot represent?",
-      "answers": {
-        "a": "Saturation current (I_S)",
-        "b": "Current gain (\u03b2)",
-        "c": "Emitter efficiency",
-        "d": "Thermal voltage (V_T)"
-      },
-      "correctAnswer": "a",
-      "difficulty": "beginner"
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "2. The thermal voltage $V_T$ is defined as $kT/q$. At a standard room temperature of 300K, what is its approximate value?",
+    "answers": {
+      "a": "1.2 V",
+      "b": "0.7 V",
+      "c": "25.9 mV",
+      "d": "1.0 mV"
     },
-    {
-      "question": "3. The Gummel plot is commonly used to determine which of the following parameters of a BJT?",
-      "answers": {
-        "a": "Collector-emitter voltage (V_CE)",
-        "b": "Base-emitter voltage (V_BE)",
-        "c": "Saturation current (I_S)",
-        "d": "Thermal resistance (R_th)"
-      },
-      "correctAnswer": "c",
-      "difficulty": "beginner"
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "3. Which SPICE parameters are specifically used to model the non-ideal recombination current that dominates at very low forward bias?",
+    "answers": {
+      "a": "$IS$ and $N$",
+      "b": "$BV$ and $IBV$",
+      "c": "$RS$ and $IKF$",
+      "d": "$ISR$ and $NR$"
     },
-    {
-      "question": "4. What is the primary purpose of characterizing a BJT using the Gummel plot method?",
-      "answers": {
-        "a": "To analyze power dissipation",
-        "b": "To optimize frequency response",
-        "c": "To extract key parameters like current gain and saturation current",
-        "d": "To measure voltage drop across the collector-emitter junction"
-      },
-      "correctAnswer": "c",
-      "difficulty": "intermediate"
+    "correctAnswer": "d",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "4. In the SPICE model, the ideality factor for the recombination current, $NR$, is typically fixed at what value?",
+    "answers": {
+      "a": "0.5",
+      "b": "1.0",
+      "c": "2.0",
+      "d": "3.0"
     },
-    {
-      "question": "5. What does the ideality factor in a BJT refer to?",
-      "answers": {
-        "a": "A measure of how closely the BJT follows the ideal exponential relationship",
-        "b": "A measure of collector current efficiency",
-        "c": "A measure of base current leakage",
-        "d": "A measure of temperature dependence"
-      },
-      "correctAnswer": "a",
-      "difficulty": "intermediate"
+    "correctAnswer": "c",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "5. A common graphical method to extract $RS$ involves plotting $dV_D / d(ln(I_D))$ versus $I_D$. What does the slope of this plot represent?",
+    "answers": {
+      "a": "$RS$",
+      "b": "$N \\cdot V_T$",
+      "c": "$IS$",
+      "d": "$1 / RS$"
     },
-    {
-      "question": "6. How does the Gummel plot help in analyzing BJT operation in different regions?",
-      "answers": {
-        "a": "By identifying breakdown voltage",
-        "b": "By showing linear and saturation regions clearly",
-        "c": "By measuring thermal resistance",
-        "d": "By calculating power gain"
-      },
-      "correctAnswer": "b",
-      "difficulty": "intermediate"
+    "correctAnswer": "a",
+    "difficulty": "advanced"
+  },
+  {
+    "question": "6. If a diode's forward voltage $V_F$ decreases significantly as temperature increases (at a constant $I_D$), this is primarily due to:",
+    "answers": {
+      "a": "The increase in $RS$ with temperature.",
+      "b": "The increase in $V_T$ with temperature.",
+      "c": "The strong exponential increase of $IS$ with temperature.",
+      "d": "The decrease in $N$ with temperature."
     },
-    {
-      "question": "7. What does the slope of the collector current (I_C) versus base-emitter voltage (V_BE) plot determine?",
-      "answers": {
-        "a": "Emitter efficiency",
-        "b": "Saturation current (I_S)",
-        "c": "Current gain (\u03b2)",
-        "d": "Thermal voltage (V_T)"
-      },
-      "correctAnswer": "b",
-      "difficulty": "advanced"
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "7. The SPICE parameter $XTI$ (Saturation Current Temperature Exponent) is typically set to what value for a standard silicon pn-junction diode?",
+    "answers": {
+      "a": "1.0 (for mobility dependence)",
+      "b": "1.5 (for Schottky diodes)",
+      "c": "3.0 (for Si $n_i^2$ dependence)",
+      "d": "-1.5 (for $RS$ dependence)"
     },
-    {
-      "question": "8. In a Gummel plot, what does the term 'early effect' refer to?",
-      "answers": {
-        "a": "Voltage dependence of collector current",
-        "b": "Temperature dependence of base current",
-        "c": "Voltage dependence of base current",
-        "d": "Temperature dependence of collector current"
-      },
-      "correctAnswer": "a",
-      "difficulty": "advanced"
+    "correctAnswer": "c",
+    "difficulty": "advanced"
+  },
+  {
+    "question": "8. What is the main purpose of using numerical optimization (e.g., Levenberg-Marquardt algorithm) for SPICE parameter extraction?",
+    "answers": {
+      "a": "To calculate $V_T$ from first principles.",
+      "b": "To find a set of parameters that minimizes the error between the model equation and the measured data.",
+      "c": "To isolate and measure only the series resistance $RS$.",
+      "d": "To force the ideality factor $N$ to be exactly 1."
     },
-    {
-      "question": "9. How can the Gummel plot aid in optimizing BJT circuit design?",
-      "answers": {
-        "a": "By minimizing thermal resistance",
-        "b": "By maximizing current gain",
-        "c": "By ensuring proper biasing and performance",
-        "d": "By increasing breakdown voltage"
-      },
-      "correctAnswer": "c",
-      "difficulty": "advanced"
+    "correctAnswer": "b",
+    "difficulty": "intermediate"
+  },
+  {
+    "question": "9. The total forward current in the SPICE model is the sum of the ideal diffusion current (using $IS, N$) and the non-ideal recombination current (using $ISR, NR$). At moderate to high currents, which component dominates?",
+    "answers": {
+      "a": "The recombination current ($ISR$)",
+      "b": "The ideal diffusion current ($IS$)",
+      "c": "They are always equal.",
+      "d": "The current due to $RS$."
     },
-    {
-      "question": "10. What region of operation is characterized by a Gummel plot where collector current (I_C) remains relatively constant with changes in base-emitter voltage (V_BE)?",
-      "answers": {
-        "a": "Cut-off",
-        "b": "Active",
-        "c": "Saturation",
-        "d": "Breakdown"
-      },
-      "correctAnswer": "c",
-      "difficulty": "advanced"
-    }
+    "correctAnswer": "b",
+    "difficulty": "beginner"
+  },
+  {
+    "question": "10. In the high-level injection region, the slope of the $log(I_D)$ vs. $V_D$ plot corresponds to an ideality factor $N$ approaching:",
+    "answers": {
+      "a": "0.5",
+      "b": "1.0",
+      "c": "2.0",
+      "d": "Infinity"
+    },
+    "correctAnswer": "c",
+    "difficulty": "intermediate"
+  }
+
   ]
 }
