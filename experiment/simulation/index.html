@@ -183,7 +183,7 @@
                     </div>
                     
                     <!-- Simulation Button -->
-                    <button id="simulateBtn" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-150 mt-6 font-semibold">
+                    <button id="simulateBtn" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-150 mt-6 font-semibold disabled:bg-gray-400" disabled>
                         Go to Simulation &raquo;
                     </button>
                 </div>
@@ -243,10 +243,13 @@
                 </div>
             </div>
 
-            <!-- New Generate Report Button -->
-            <div class="mt-8 text-center">
+            <!-- Action Buttons -->
+            <div class="mt-8 text-center flex flex-wrap justify-center gap-4">
                 <button id="generateReportBtn" class="bg-teal-600 text-white py-3 px-8 rounded-md hover:bg-teal-700 transition duration-150 font-semibold shadow-md disabled:bg-gray-400">
                     Generate Report
+                </button>
+                <button id="downloadSimDataBtn" class="bg-blue-600 text-white py-3 px-8 rounded-md hover:bg-blue-700 transition duration-150 font-semibold shadow-md disabled:bg-gray-400">
+                    Download Simulated Data
                 </button>
             </div>
 
@@ -267,14 +270,14 @@
             <!-- Header -->
             <div class="report-header">
                 <h1>Extraction of diode SPICE parameters related to forward Current-Voltage (I-V)</h1>
-                <p>TCAD Lab IIT KGP</p>
+                <p>TCAD Lab IITKGP</p>
             </div>
             <div class="report-date-time">
                 <p id="report-date"></p>
                 <p id="report-time"></p>
             </div>
             <div class="report-main-title">
-                <h2>Extraction & Simulation Results</h2>
+                <h2>Extraction & Simulation Report</h2>
             </div>
 
             <!-- Section 1: Measured Data -->
@@ -321,7 +324,7 @@
             <div class="report-footer">
                 <div class="report-signatures">
                     <div class="report-signature-block">Student Signature</div>
-                    <div class="report-signature-block" style="text-align: right;">Instructor Signature</div>
+                    <div class="report-signature-block" style="text-align: right;">Faculty Signature</div>
                 </div>
             </div>
         </div>
@@ -349,6 +352,7 @@
         const simRs = document.getElementById('simRs');
         const simN_EC = document.getElementById('simN_EC');
         const generateReportBtn = document.getElementById('generateReportBtn');
+        const downloadSimDataBtn = document.getElementById('downloadSimDataBtn');
         
         const ivChartCtx = document.getElementById('ivChart').getContext('2d');
         const simChartCtx = document.getElementById('simChart').getContext('2d');
@@ -603,6 +607,9 @@
             resN.value = extractedParams.n.toFixed(4);
             resN_EC.value = extractedParams.n.toFixed(4); // Sync N with n
             resRs.value = extractedParams.Rs.toFixed(4);
+            
+            // --- Enable Simulation Button ---
+            simulateBtn.disabled = false;
         }
 
         /**
@@ -677,6 +684,10 @@
             ];
             
             simChartInstance = createChart(simChartCtx, simChartInstance, datasets);
+
+            // Enable report/download buttons now that simulation is done
+            generateReportBtn.disabled = false;
+            downloadSimDataBtn.disabled = false;
         }
 
         /**
@@ -826,6 +837,55 @@ Ohmic Resistance (Rs):   ${parseFloat(simRs.value).toFixed(4)} \u03A9`;
             }
         }
 
+        /**
+         * Generates and downloads a CSV file of the simulated data.
+         */
+        function downloadSimulatedData() {
+            // 0. Check if data is available
+            if (!simChartInstance) {
+                alert("Please simulate data first.");
+                return;
+            }
+
+            const btn = document.getElementById('downloadSimDataBtn');
+            btn.textContent = 'Downloading...';
+            btn.disabled = true;
+
+            try {
+                // 1. Get simulated data
+                const simulatedData = getSimulatedDataPoints();
+                if (simulatedData.length === 0) {
+                    alert("No simulated data to download.");
+                    return;
+                }
+
+                // 2. Create CSV content
+                let csvContent = "Voltage (V),Current (A)\n";
+                simulatedData.forEach(p => {
+                    csvContent += `${p.x.toFixed(10)},${p.y.toExponential(6)}\n`;
+                });
+
+                // 3. Create Blob and trigger download
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const link = document.createElement("a");
+                const url = URL.createObjectURL(blob);
+                link.setAttribute("href", url);
+                link.setAttribute("download", "simulated_diode_data.csv");
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+            } catch (error) {
+                console.error("Error downloading CSV:", error);
+                alert("An error occurred while downloading the data. See console for details.");
+            } finally {
+                // 4. Restore button
+                btn.textContent = 'Download Simulated Data';
+                btn.disabled = false;
+            }
+        }
+
         // --- Event Listeners ---
         plotDataBtn.addEventListener('click', plotData);
         extractParamsBtn.addEventListener('click', extractParameters);
@@ -846,6 +906,7 @@ Ohmic Resistance (Rs):   ${parseFloat(simRs.value).toFixed(4)} \u03A9`;
 
         simRs.addEventListener('input', updateSimulation);
         generateReportBtn.addEventListener('click', generateReport);
+        downloadSimDataBtn.addEventListener('click', downloadSimulatedData);
         
         // Plot default data on page load
         window.onload = plotData;
@@ -853,4 +914,6 @@ Ohmic Resistance (Rs):   ${parseFloat(simRs.value).toFixed(4)} \u03A9`;
     </script>
 </body>
 </html>
+
+
 
