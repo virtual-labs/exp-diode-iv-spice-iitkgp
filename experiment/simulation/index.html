@@ -1,727 +1,856 @@
 <!DOCTYPE html>
-<html lang="en"><!--html tag start-->
+<html lang="en">
 <head>
-  <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Diode SPICE Parameter Extractor & Simulator</title>
+    <!-- Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <title>PMOS Capacitor Band Diagram</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- jsPDF (Core) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
-    
-    <!-- Font Awesome and jQuery UI CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-ui/1.12.1/themes/base/jquery-ui.css">   
-    <link rel="stylesheet" href="adik.css"> 
-    
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- MathJax for mathematical typesetting -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
-    
-    <!-- Additional Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.2.1/math.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
-    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
-   
-    <script src="./js/jquery.flot.min.js"></script>
-
-
-
-
     <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f9;
-        color: #333;
-        margin: 0;
-        padding: 20px;
-      }
-      .form-container {
-        max-width: 1100px;
-        margin: 0 auto;
-        background: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-      
-      td {
-        padding: 10px;
-        text-align: right;
-      }
-      td:nth-child(2n) {
-        text-align: left;
-        padding-left: 5px;
-      }
-      input[type="text"] {
-        width: 100px;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
-      input[type="button"] {
-        padding: 8px 12px;
-        margin: 5px;
-        border: none;
-        border-radius: 4px;
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-      input[type="button"]:hover {
-        background-color: #0056b3;
-      }
-      .button-group {
-        text-align: center;
-        margin-top: 20px;
-      }
-      .button-group input[type="button"] {
-        margin: 5px;
-      }
-      .material-buttons {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 20px;
-      }
-      .material-buttons input[type="button"] {
-        background-color: #28a745;
-      }
-      .material-buttons input[type="button"]:hover {
-        background-color: #218838;
-      }
-      .voltage-control {
-        text-align: center;
-        margin-top: 20px;
-      }
-      .voltage-control input[type="button"] {
-        background-color: #dc3545;
-      }
-      .voltage-control input[type="button"]:hover {
-        background-color: #c82333;
-      }
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
 
+        /* Custom styles for better number inputs */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        /* Ensure charts are responsive but don't shrink too small */
+        .chart-container {
+            position: relative;
+            min-height: 400px;
+            width: 100%;
+        }
 
-      .table-container {
-      max-width: 800px;
-      margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    td {
-      padding: 10px;
-      text-align: left;
-    }
-    td p {
-      margin: 0;
-      display: flex;
-      align-items: center;
-    }
-    td span {
-      margin-left: 5px;
-    }
-    .math {
-      font-family: "Times New Roman", serif;
-      font-style: italic;
-    }
-    .flex-container {
-      display: flex;
-      align-items: center;
-    }
-    .center-text {
-      text-align: center;
-      font-weight: bold;
-      margin: 20px 0;
-    }
-    .value {
-      font-weight: bold;
-      color: #007bff;
-    }
+        /* Styles for the hidden PDF report template */
+        #report-content {
+            width: 8.5in;
+            min-height: 11in;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 0.5in;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        .report-header { text-align: left; margin-bottom: 20px; }
+        .report-header h1 { font-size: 18px; font-weight: 700; margin: 0; }
+        .report-header p { font-size: 14px; margin: 4px 0; }
+        .report-date-time { margin-bottom: 30px; }
+        .report-date-time p { font-size: 12px; margin: 2px 0; color: #333; }
+        .report-main-title { text-align: center; margin-bottom: 10px; }
+        .report-main-title h2 { font-size: 24px; font-weight: 700; color: #005a9c; margin: 0; }
+        .report-section-title { font-size: 16px; font-weight: 700; color: #333; margin-top: 20px; border-bottom: 2px solid #eee; padding-bottom: 4px;}
+
+        .report-table-container {
+            max-height: 250px; /* Limit table height to prevent extreme length */
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+        .report-table { width: 100%; border-collapse: collapse; }
+        .report-table th, .report-table td {
+            border: 1px solid #ddd;
+            padding: 6px 8px;
+            font-size: 10px;
+            text-align: left;
+        }
+        .report-table th { background-color: #f4f4f4; font-weight: 600; }
+        .report-table td:nth-child(1) { font-family: 'Courier New', Courier, monospace; }
+        .report-table td:nth-child(2) { font-family: 'Courier New', Courier, monospace; }
+
+        .report-params { margin-top: 10px; }
+        .report-params strong { font-size: 13px; }
+        .report-params pre {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            background-color: #f8f8f8;
+            border: 1px solid #eee;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .report-chart-container {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .report-footer { margin-top: 40px; font-size: 14px; }
+        .report-signatures { display: flex; justify-content: space-between; margin-bottom: 40px; }
+        .report-signature-block { width: 45%; border-top: 1px solid #000; padding-top: 8px; }
+
     </style>
+</head>
+<body class="bg-gray-100 p-4 sm:p-8">
 
-  </head>
-<body><!--body tag start-->
-    
-    
-   
-	
-    <div class="container p-3 my-5 text-left border"><!--3rd Container under body tag start-->
-      <div class="row"><!--First row under 3rd container start-->
-        <div class="col-md-1"></div><!--First col under 3rd container start& end-->
-        <div class="col-md-10"><!--2nd col under 3rd container start-->
-            <p class="text-center bg-success"> <a class="nav-link" data-bs-toggle="tab"  id="instcontrol" style="background-color:#128BD9"  ><span class=" h3 text-dark"> Instructions </span></a>
-              <div id="inst" style="display:block;height:200px;overflow-y:auto;text-align:justify">
-					
-					<!-- INSRTUCTION START -->
-          <ol>
-    
-            <h4>Input Parameters</h4>
-            <ul>
-              <li><strong>ϕm, ϕs (Work Function of the Metal and Semiconductor):</strong> Enter the values in electron volts (eV).</li>
-              <li><strong>χ (Electron Affinity):</strong> Enter the electron affinity in eV.</li>
-              <li><strong>tox, tox2 (Oxide Thickness):</strong> Enter the oxide thickness in nanometers (nm).</li>
-              <li><strong>εox, εox2 (Dielectric Constants of the Oxides):</strong> Enter the dielectric constants.</li>
-              <li><strong>Eg (Bandgap Energy):</strong> Enter the bandgap energy using the provided formula if needed.</li>
-              <li><strong>Nd (Donor Concentration)</strong> and <strong>Na (Acceptor Concentration):</strong> Enter the concentration values in cm³.</li>
-              <li><strong>T (Temperature):</strong> Enter the operating temperature in Kelvin (K).</li>
-              <li><strong>εsemi (Semiconductor Dielectric Constant):</strong> Enter the value.</li>
-              <li><strong>V (Voltage):</strong> Input the voltage applied across the device.</li>
-              <li><strong>Material Selection (Si, Ge, GaAs):</strong> Choose the material of the semiconductor.</li>
-            </ul>
-  
-            <h4>Submit</h4>
-            <p>Once all parameters are entered, click the <strong>Submit</strong> button to run the simulation.</p>
-  
-            <h4>View Results</h4>
-            <ul>
-              <li><strong>Band Diagram:</strong> Observe the energy levels within the semiconductor, including the conduction band edge, valence band edge, and Fermi level.</li>
-              
-            </ul>
-  
-            <h4>Explore Different Regions</h4>
-            <p>Use the <strong>Accumulation</strong>, <strong>Flatband</strong>, <strong>Depletion</strong>, <strong>Threshold</strong>, and <strong>Inversion</strong> buttons to explore different operational regions of the PMOS transistor.</p>
-  
-            <h4>Additional Notes</h4>
-            <ul>
-              <li>The right side of the screen displays calculated parameters such as the built-in potential (ϕs), maximum depletion width (xP), surface potential (ψs), and threshold voltage (VT).</li>
-              <li>The calculated charge (Q) and electric field (Eox) in the oxide layer are also shown.</li>
-              <li>Make sure to adjust and explore the parameters to see how they affect the band diagram, charge density, and electric field.</li>
-            </ul>
-     
-    </ol>
-				<!-- INSTRUCTION STOP -->	
-					
-		   </div>
-            </p> 
-          </div><!--2nd col under 3rd container end-->
-		  
-        <div class="col-md-1"></div><!--3rd col under 3rd container start& end-->
-      </div><!--First row under 3rd container end-->
-    </div><!--3rd Container under body tag end-->
-	
-   <!--simulation start -->
-   <div>
-    <body style="background-color:white" onload="moscap();"><div id="MathJax_Message" style="display: none;"></div>
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">
+            Diode SPICE Parameter Extractor & Simulator
+        </h1>
 
+        <!-- View 1: Data Extraction -->
+        <div id="extractionView">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- Left Column: Data Input & Controls -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">1. Input Data & Extraction</h2>
+                    
+                    <!-- Data Input Textarea -->
+                    <label for="dataInput" class="block text-sm font-medium text-gray-600 mb-2">
+                        Enter your V,I data (one pair per line):
+                    </label>
+                    <textarea id="dataInput" rows="12" class="w-full p-3 border border-gray-300 rounded-md font-mono text-sm focus:ring-2 focus:ring-blue-500">
+0.300000000000000,0.000000001100000
+0.325000000000000,0.000000002880000
+0.350000000000000,0.000000007570000
+0.375000000000000,0.000000019900000
+0.400000000000000,0.000000052400000
+0.425000000000000,0.000000138000000
+0.450000000000000,0.000000362000000
+0.475000000000000,0.000000952000000
+0.500000000000000,0.000002500000000
+0.525000000000000,0.000006580000000
+0.550000000000000,0.000017300000000
+0.575000000000000,0.000045500000000
+0.600000000000000,0.000119000000000
+0.625000000000000,0.000311000000000
+0.650000000000000,0.000803000000000
+0.675000000000000,0.002010000000000
+0.700000000000000,0.004760000000000
+0.725000000000000,0.010200000000000
+0.750000000000000,0.019000000000000
+0.775000000000000,0.031100000000000
+0.800000000000000,0.046000000000000
+0.825000000000000,0.062900000000000
+0.850000000000000,0.081200000000000
+0.875000000000000,0.101000000000000
+0.900000000000000,0.121000000000000
+0.925000000000000,0.142000000000000
+0.950000000000000,0.163000000000000
+0.975000000000000,0.185000000000000
+1.000000000000000,0.207000000000000
+</textarea>
+                    
+                    <!-- Control Buttons -->
+                    <div class="flex flex-wrap gap-3 mt-4">
+                        <button id="plotDataBtn" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-150">
+                            Plot my Data
+                        </button>
+                        <button id="extractParamsBtn" class="flex-1 bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-150">
+                            Extract Parameters
+                        </button>
+                    </div>
 
-<style>
-h3 {margin-left:1cm}
-</style>
-
-<script type="text/x-mathjax-config;executed=true">
-  MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
-    jax: ["input/TeX","output/HTML-CSS"],
-    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
-  });
-</script>
-
-
-<script language="JavaScript">
-
-var Ev = [];  //valence band energy
-// d arrays used for plotting
-var d1 = [];  //Ev
-var d2 = [];  //EF
-var d3 = [];  //Ec
-var d4 = [];  //n
-var d5 = [];  //p
-var d6 = [];  //rho
-var d7 = [];  //Electric field
-
-echarge = 1.60217733E-19;
-kb = 1.380658E-23/echarge;  //eV/K
-
-function moscap() { 
- tox = eval(data.tox.value)*1E-9;
- na = 1E6*eval(data.na.value);
- Va = eval(data.V.value); //applied voltage
- if (Math.abs(Va)<1E-10) {V = 0; data.V.value=0;}
- Nv = 1E6*eval(data.Nv.value);
- Nc = 1E6*eval(data.Nc.value);
- T = eval(data.T.value);
- Eg = eval(data.Eg.value);
- phi_m = eval(data.phi_m.value);
- chi_s = eval(data.chi_s.value);
- document.getElementById('Eg_txt').innerHTML=Eg.toPrecision(3);
- eps = 8.854187817E-12*eval(data.eps.value);
- eps_ox = 8.854187817E-12*eval(data.eps_ox.value);
- ni=Math.sqrt(Nc*Nv*Math.pow(T/300,3))*Math.exp(1.6022E-19*(-Eg)/(2*1.380658E-23*T));
- document.getElementById('ni_txt').innerHTML=(ni/1E6).toPrecision(3);
- Ev0 = kb*T*Math.log(na/Nv); //Ev - EF  far from the oxide
- Ec0 = kb*T*Math.log(ni*ni/(Nc*na)); //EF - Ec far from the oxide
- phi_s = chi_s + Eg + Ev0; // work function of semiconductor 
- document.getElementById('phi_s_txt').innerHTML=(phi_s).toPrecision(3);
- Vfb = phi_m  - phi_s; // flat band voltage
- document.getElementById('Vfb_txt').innerHTML=(Vfb).toPrecision(3);
- VT = 2*tox*Math.sqrt(eps*na*1.380658E-23*T*Math.log(na/ni))/eps_ox+2*kb*T*Math.log(na/ni);  //threshold voltage in depletion approximation
- document.getElementById('VT_txt').innerHTML=(VT+Vfb).toPrecision(3);
- xp = 2*Math.sqrt(eps*kb*T*Math.log(na/ni)/(echarge*na)); // maximum depletion width in depletion approximation
- document.getElementById('xp_txt').innerHTML=(1E6*xp).toPrecision(3);
- cox= eps_ox/tox;
- V = Va - phi_m + phi_s; //zero bias should result in a built-in voltage corresponding to the work function difference
- Es0 = -tox*echarge*na/eps_ox + echarge*na*Math.sqrt(tox*tox/(eps_ox*eps_ox) + 2*(Va - Vfb)/(echarge*na*eps)); //Es from the depletion approximation
- document.getElementById('Es0_txt').innerHTML=Es0.toPrecision(3);
- VIB0 = eps*Es0*Es0/(2*echarge*na);  //V_IB from the depletion approximation
- document.getElementById('VIB0_txt').innerHTML=VIB0.toPrecision(3);
-
-
-/* This section starts with somewhat arbitray initial conditions for Ev(x) and its derivative
-   dEv(x)/dx inside the bulk of the semiconductor and then integrates the Possion equation
-   to the left to calculate the voltage at the semiconductor/oxide interface and then the 
-   voltage at the gate. The calculated voltage at the gate is compared to the desired voltage at the gate 
-   the initial conditions are adjusted to get the calculated value closer to the desired value.
-*/
-  xr = 3.6*xp;   //right position for binary search
-  xm = 1.8*xp; //middle position for binary search
-  xl = 0;      //left position for binary search
-  for (j=0; j<16; j++) {
-    Ev = Ev0;
-    dEvdx = 0;
-    if (V>0) {dEvdx = 1e3; } 
-    if (V<0) {dEvdx = -1e3; } 
-    dx = xm/300;
-    for (i=0; i<301; i++) { //numerical integration using the midpoint method
-      x = xm*(1-i/300);
-      Ev_mid = Ev - dEvdx*dx/2;  //Ev at the midpoint
-      rho_mid = -na - Nc*Math.exp(-(Eg+Ev_mid)/(kb*T)) + Nv*Math.exp(Ev_mid/(kb*T));
-      dEvdx_mid = dEvdx - echarge*rho_mid*0.5*dx/eps;
-      Ev = Ev - dEvdx_mid*dx;
-      dEvdx = dEvdx - echarge*rho_mid*dx/eps;
-    }
-    Vs = Ev0 - Ev;
-    Es = dEvdx;
-    Eox = Es*eps/eps_ox;
-    Vtmp = Vs + Eox*tox;
-
-//binary search
-    if (V<0) {  
-      if (Vtmp > V) {xl = xm; xm = (xr + xl)/2; }
-      if (Vtmp < V) {xr = xm; xm = (xr + xl)/2; } 
-    }
-    else {
-      if (Vtmp < V) {xl = xm; xm = (xr + xl)/2; }
-      if (Vtmp > V) {xr = xm; xm = (xr + xl)/2; } 
-    }
-
-  } // end j
-
-/* This section solves the Possion equation one more time using the optimized initial conditions
-   and saves the data in arrays so it can be plotted.
-*/
-    Ev = Ev0;
-    dEvdx = 0;
-    if (V>0) {dEvdx = 1e3; } 
-    if (V<0) {dEvdx = -1e3; } 
-    dx = xm/300;
-    for (i=0; i<301; i++) { //numerical integration using the midpoint method
-      x = xm*(1-i/300);
-      Ev_mid = Ev - dEvdx*dx/2;  //Ev at the midpoint
-      rho_mid = -na - Nc*Math.exp(-(Eg+Ev_mid)/(kb*T)) + Nv*Math.exp(Ev_mid/(kb*T));
-      dEvdx_mid = dEvdx - echarge*rho_mid*0.5*dx/eps;
-      Ev = Ev - dEvdx_mid*dx;
-      dEvdx = dEvdx - echarge*rho_mid*dx/eps;
-
-      d1[i] = [1E6*x,Ev];
-      d3[i] = [1E6*x,Ev+Eg];
-      n = Nc*Math.exp(-(Eg+Ev)/(kb*T))/1E21;
-      p = Nv*Math.exp(Ev/(kb*T))/1E21
-      d4[i] = [1E6*x,n];
-      d5[i] = [1E6*x,p];
-      d6[i] = [1E6*x,p-n-na/1E21];
-      d7[i] = [1E6*x,dEvdx*1E-6];
-    }
-    d4[301] = [0,0]; d4[302] = [-1E6*(0.25*xp+tox),0];
-    d5[301] = [0,0]; d5[302] = [-1E6*(0.25*xp+tox),0];
-    d6[301] = [0,0]; d6[302] = [-1E6*tox,0]; d6[303] = [-1E6*tox,-d6[300][1]];  d6[304] = [-1E6*(tox-xm/100),-0.92*d6[300][1]]; 
-    d6[305] = [-1E6*(tox+xm/100),-0.92*d6[300][1]]; d6[306] = [-1E6*tox,-d6[300][1]]; d6[307] = [-1E6*tox,0]; d6[308] = [-1E6*(0.25*xp+tox),0];
-    d2[0] = [1E6*xm,0];
-    d2[1] = [0,0];
-    VIB = Ev0 - Ev;
-    Es = dEvdx;
-    Eox = Es*eps/eps_ox;
-    Q = -Es*eps; //the charge on the semiconductor
-    d7[301] = [0,Eox*1E-6]; d7[302]=[-tox*1E6,Eox*1E-6];  d7[303] = [-tox*1E6,0]; d7[304] = [-1E6*(0.25*xp+tox),0];
-    Vtmp = VIB + Eox*tox;
-    d2[3] = null;
-    d2[4] = [-1E6*tox,-Va];
-    d2[5] = [-1E6*(0.25*xp+tox),-Va];
-    d3[301] = [0,d3[300][1]+1];
-    d3[302] = [-1E6*tox,d3[300][1]+1- Eox*tox];
-    d3[303] = [-1E6*tox,-Vtmp];
-    d1[301] = [0,d1[300][1]-1];
-    d1[302] = [-1E6*tox,d1[300][1]-1- Eox*tox];
-    d1[303] = [-1E6*tox,-Vtmp];
-    if (V==0) { //
-      d1[0] = [1E6*xp,Ev0]; d2[0] = [1E6*xp,0]; d3[0] = [1E6*xp,Ev0+Eg];
-      d4[0] = [1E6*xp,0]; d5[0] = [1E6*xp,na/1E21]; d6[0] = [1E6*xp,0]; 
-      d7.length = 0;
-      d7[0] = [1E6*xp,0]; d7[1] = [-1E6*(0.25*xp+tox),0];
-    }
-
-  document.getElementById('Vs_txt').innerHTML=(VIB).toPrecision(3);
-  document.getElementById('Vtmp_txt').innerHTML=(Vtmp + phi_m - phi_s).toPrecision(3);
-  document.getElementById('Q_txt').innerHTML=(Q).toPrecision(3);
-  document.getElementById('n0_txt').innerHTML=(d4[300][1]).toPrecision(3);
-  document.getElementById('Eox_txt').innerHTML=(Eox).toPrecision(3); 
-  document.getElementById('Es_txt').innerHTML=(Es).toPrecision(3); 
-
-//plot bands
-     // Define data for the plot
-     var data1 = [ 
-    { data: d3, color: "rgb(255,0,0)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(255,0,0)" }, label: "E<sub>c</sub>" },
-    { data: d1, color: "rgb(0,255,255)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(0,255,255)" }, label: "E<sub>v</sub>" },
-    { data: d2, color: "rgb(255,165,0)", shadowSize: 0, lines: { show: true, lineWidth: 2 }, points: { show: true, radius: 3, fill: true, fillColor: "rgb(255,165,0)" }, label: "E<sub>F</sub>" }
-];
-
-// Plot the graph
-var plot = $.plot($("#placeholder1"), data1, {
-    grid: { hoverable: true, clickable: true },
-    xaxis: { axisLabel: "Voltage (V)" },
-    yaxis: { axisLabel: "Energy Levels" }
-});
-
-$("#placeholder1").bind("plothover", function (event, pos, item) {
-    if (item) {
-        $("#tooltip").html(item.series.label + "<br>V: " + item.datapoint[0].toFixed(2) + " V<br>E: " + item.datapoint[1].toFixed(2))
-            .css({ top: item.pageY + 5, left: item.pageX + 5 })
-            .fadeIn(200);
-    } else {
-        $("#tooltip").hide();
-    }
-});
-
-$(document).ready(function () {
-    $("body").append("<div id='tooltip' style='position: absolute; display: none; border: 1px solid #ccc; background: #fff; padding: 5px; font-size: 12px;'></div>");
-});
-
-
-
-
-
-
-MathJax.Hub.Queue(['Typeset',MathJax.Hub]);  //have Mathjax process the plot legends that were redrawn
-}
-
-</script>
-
-
-<style>
-p {margin-left:1cm; margin-right:1cm;}
-p.t {margin-left:0cm; margin-right:0cm;}
-h2 {margin-left:1cm;}
-</style>
-
-  
-  
-
-
-<div class="form-container">
-  <form name="data">
-    <table>
-      <tr>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϕ</mi><mi>m</mi></msub></math> =</td>
-        <td><input type="text" name="phi_m" size="10" value="4.08" spellcheck="false"></td>
-        <td>eV</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>χ</mi><mi>s</mi></msub></math> =</td>
-        <td><input type="text" name="chi_s" size="10" value="4.05" spellcheck="false"></td>
-        <td>eV</td>
-      </tr>
-      <tr>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>t</mi><mrow><mi>o</mi><mi>x</mi></mrow></msub></math> =</td>
-        <td><input type="text" name="tox" size="10" value="3" spellcheck="false"></td>
-        <td>nm</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϵ</mi><mrow><mi>o</mi><mi>x</mi></mrow></msub></math> =</td>
-        <td><input type="text" name="eps_ox" size="10" value="4" spellcheck="false"></td>
-        <td></td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>c</mi></msub><mo>(</mo><mn>300</mn><mo>)</mo></math> =</td>
-        <td><input type="text" name="Nc" size="10" value="2.78E19" spellcheck="false"></td>
-        <td>1/cm³</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>T</mi></math> =</td>
-        <td><input type="text" name="T" size="10" value="300" spellcheck="false"></td>
-        <td>K</td>
-      </tr>
-      <tr>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>E</mi><mi>g</mi></msub></math> =</td>
-        <td><input type="text" name="Eg" size="25" value="1.166-4.73E-4*T*T/(T+636)" spellcheck="false"></td>
-        <td>eV</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>ϵ</mi><mrow><mi>s</mi><mi>e</mi><mi>m</mi><mi>i</mi></mrow></msub></math> =</td>
-        <td><input type="text" name="eps" size="10" value="12" spellcheck="false"></td>
-        <td></td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>v</mi></msub><mo>(</mo><mn>300</mn><mo>)</mo></math> =</td>
-        <td><input type="text" name="Nv" size="10" value="9.84E18" spellcheck="false"></td>
-        <td>1/cm³</td>
-        <td><math xmlns="http://www.w3.org/1998/Math/MathML"><msub><mi>N</mi><mi>A</mi></msub></math> =</td>
-        <td><input type="text" name="na" size="10" value="1E17" spellcheck="false"></td>
-        <td>1/cm³</td>
-      </tr>
-    </table>
-
-    <div class="button-group">
-      <div class="voltage-control">
-        <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>V</mi></math> = 
-        <input type="text" name="V" size="10" value="0" spellcheck="false"> V 
-        <input type="button" value="-" onclick="data.V.value = (parseFloat(data.V.value) - 0.01).toFixed(2); moscap();">
-        <input type="button" value="+" onclick="data.V.value = (parseFloat(data.V.value) + 0.01).toFixed(2); moscap();">
-      </div>
-      <input type="button" value="Submit" onclick="moscap();">
-    </div>
-
-    <div class="material-buttons">
-      <input type="button" value=" Si " onclick="setMaterial('Si');">
-      <input type="button" value=" Ge " onclick="setMaterial('Ge');">
-      <input type="button" value="GaAs" onclick="setMaterial('GaAs');">
-    </div>
-
-    <div class="button-group">
-      <input type="button" value="Accumulation" onclick="setVoltage(Vfb - 0.2);">
-      <input type="button" value="Flatband" onclick="setVoltage(Vfb);">
-      <input type="button" value="Depletion" onclick="setVoltage(0.5 * (VT + 2 * Vfb));">
-      <input type="button" value="Threshold" onclick="setVoltage(VT + Vfb);">
-      <input type="button" value="Inversion" onclick="setVoltage(VT + Vfb + 0.2);">
-    </div>
-  </form>
-</div>
-
-<script>
-  function setMaterial(material) {
-    const materials = {
-      Si: {
-        Nc: '2.78E19',
-        Nv: '9.84E18',
-        chi_s: '4.05',
-        Eg: '1.166 - (4.73E-4 * T * T) / (T + 636)'
-      },
-      Ge: {
-        Nc: '1.04E19',
-        Nv: '6.0E18',
-        chi_s: '4.0',
-        Eg: '0.7437 - (4.77E-4 * T * T) / (T + 235)'
-      },
-      GaAs: {
-        Nc: '4.45E17',
-        Nv: '7.72E18',
-        chi_s: '4.07',
-        Eg: '1.519 - (5.41E-4 * T * T) / (T + 204)'
-      }
-    };
-
-    const { Nc, Nv, chi_s, Eg } = materials[material];
-    data.Nc.value = Nc;
-    data.Nv.value = Nv;
-    data.chi_s.value = chi_s;
-    data.Eg.value = Eg;
-    moscap();
-  }
-
-  function setVoltage(value) {
-    data.V.value = value;
-    moscap();
-  }
-</script>
-
-<table align="center"><tbody><tr><td>
-
-<p style="text-align:center"><b>Band diagram</b></p>
-
-<table align="center">
-    <tbody>
-        <tr>
-            <td>
-                <p style="text-align:center;">Energy<br>[eV]</p>
-            </td>
-            <td>
-                <div id="placeholder1" style="width: 400px; height: 300px; position: relative;">
-                    <canvas class="flot-base" width="400" height="300"></canvas>
-                    <canvas class="flot-overlay" width="400" height="300" style="position: absolute; left: 0; top: 0;"></canvas>
-                    <div class="flot-text" style="position: absolute; inset: 0; font-size: smaller; color: #545454;">
-                        <div class="flot-x-axis xAxis" style="position: absolute; inset: 0; display: block;">
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 62px; text-align: center;">0.00</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 138px; text-align: center;">0.05</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 214px; text-align: center;">0.10</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 290px; text-align: center;">0.15</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 282px; left: 366px; text-align: center;">0.20</div>
+                    <!-- Results Output -->
+                    <div id="resultsOutput" class="mt-6 space-y-3">
+                        <h3 class="text-lg font-semibold text-gray-700">Extracted Parameters:</h3>
+                        <div>
+                            <label for="resIs" class="block text-sm font-medium text-gray-600">Saturation Current (Is)</label>
+                            <input type="text" id="resIs" readonly class="w-full p-2 mt-1 bg-gray-100 border border-gray-300 rounded-md font-mono text-sm">
                         </div>
-                        <div class="flot-y-axis yAxis" style="position: absolute; inset: 0; display: block;">
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 269px; left: 2px; text-align: right;">-2.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 235px; left: 2px; text-align: right;">-2.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 202px; left: 2px; text-align: right;">-1.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 168px; left: 2px; text-align: right;">-1.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 135px; left: 2px; text-align: right;">-0.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 101px; left: 6px; text-align: right;">0.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 67px; left: 6px; text-align: right;">0.5</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 34px; left: 6px; text-align: right;">1.0</div>
-                            <div class="flot-tick-label tickLabel" style="position: absolute; top: 0; left: 6px; text-align: right;">1.5</div>
+                        <div>
+                            <label for="resN" class="block text-sm font-medium text-gray-600">Ideality Factor (n)</label>
+                            <input type="text" id="resN" readonly class="w-full p-2 mt-1 bg-gray-100 border border-gray-300 rounded-md font-mono text-sm">
+                        </div>
+                        <div>
+                            <label for="resN_EC" class="block text-sm font-medium text-gray-600">Emission Coefficient (N)</label>
+                            <input type="text" id="resN_EC" readonly class="w-full p-2 mt-1 bg-gray-100 border border-gray-300 rounded-md font-mono text-sm">
+                        </div>
+                        <div>
+                            <label for="resRs" class="block text-sm font-medium text-gray-600">Ohmic Resistance (Rs)</label>
+                            <input type="text" id="resRs" readonly class="w-full p-2 mt-1 bg-gray-100 border border-gray-300 rounded-md font-mono text-sm">
                         </div>
                     </div>
-                    <div class="legend" style="position: absolute; top: 13px; right: 19px; background-color: rgba(255, 255, 255, 0.85);">
-                        <table style="font-size: smaller; color: #545454;">
-                            <tbody>
-                                <tr>
-                                    <td class="legendColorBox" style="padding: 1px;">
-                                        <div style="border: 1px solid #ccc;">
-                                            <div style="width: 4px; height: 0; border: 5px solid rgb(255, 0, 0); overflow: hidden;"></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel">E<sub>c</sub></td>
-                                </tr>
-                                <tr>
-                                    <td class="legendColorBox" style="padding: 1px;">
-                                        <div style="border: 1px solid #ccc;">
-                                            <div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 255); overflow: hidden;"></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel">E<sub>v</sub></td>
-                                </tr>
-                                <tr>
-                                    <td class="legendColorBox" style="padding: 1px;">
-                                        <div style="border: 1px solid #ccc;">
-                                            <div style="width: 4px; height: 0; border: 5px solid rgb(0, 0, 0); overflow: hidden;"></div>
-                                        </div>
-                                    </td>
-                                    <td class="legendLabel">E<sub>F</sub></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    
+                    <!-- Simulation Button -->
+                    <button id="simulateBtn" class="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 transition duration-150 mt-6 font-semibold">
+                        Go to Simulation &raquo;
+                    </button>
+                </div>
+
+                <!-- Right Column: Data Plot -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Measured I-V Curve</h2>
+                    <div class="chart-container">
+                        <canvas id="ivChart"></canvas>
                     </div>
                 </div>
-            </td>
-        </tr>
-        <tr>
-            <td></td>
-            <td>
-                <p style="text-align:center;"><i>x</i> [μm]</p>
-            </td>
-        </tr>
-    </tbody>
-</table>
 
-
-</td><td>
-
-  <div class="table-container">
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>g</sub> =</span>
-              <span id="Eg_txt" class="value">1.12</span>&nbsp;eV
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">n<sub>i</sub> =</span>
-              <span id="ni_txt" class="value">6.40e+9</span>&nbsp;1/cm³
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>s</sub> =</span>
-              <span id="Es_txt" class="value">1.57e+7</span>&nbsp;V/m
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>s</sub> =</span>
-              <span id="Vs_txt" class="value">0.831</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">Q =</span>
-              <span id="Q_txt" class="value">-0.00167</span>&nbsp;C/m²
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">n(x=0) =</span>
-              <span id="n0_txt" class="value">37.2</span>&nbsp;×&nbsp;10<sup>15</sup>&nbsp;1/cm³
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>ox</sub> =</span>
-              <span id="Eox_txt" class="value">4.70e+7</span>&nbsp;V/m
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>shoot</sub> =</span>
-              <span id="Vtmp_txt" class="value">0.0000221</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="flex-container">
-              <span class="math">$$\phi_s =$$</span>
-              <span id="phi_s_txt" class="value">5.05</span> eV
             </div>
-          </td>
-          <td>
-            <div class="flex-container">
-              <span class="math">$$V_{fb} = \phi_m - \phi_s =$$</span>
-              <span id="Vfb_txt" class="value">-0.972</span> V
+        </div>
+
+        <!-- View 2: Simulation -->
+        <div id="simulationView" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- Left Column: Simulation Controls -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">2. Simulation Controls</h2>
+                    
+                    <button id="backToExtractBtn" class="w-full bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600 transition duration-150 mb-6 font-semibold">
+                        &laquo; Back to Extractor
+                    </button>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label for="simIs" class="block text-sm font-medium text-gray-600">Saturation Current (Is) [A]</label>
+                            <input type="number" id="simIs" step="1e-15" class="w-full p-2 mt-1 border border-gray-300 rounded-md font-mono text-sm focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="simN" class="block text-sm font-medium text-gray-600">Ideality Factor (n)</label>
+                            <input type="number" id="simN" step="0.01" class="w-full p-2 mt-1 border border-gray-300 rounded-md font-mono text-sm focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="simN_EC" class="block text-sm font-medium text-gray-600">Emission Coefficient (N)</label>
+                            <input type="number" id="simN_EC" step="0.01" class="w-full p-2 mt-1 border border-gray-300 rounded-md font-mono text-sm focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label for="simRs" class="block text-sm font-medium text-gray-600">Ohmic Resistance (Rs) [Ω]</label>
+                            <input type="number" id="simRs" step="0.01" class="w-full p-2 mt-1 border border-gray-300 rounded-md font-mono text-sm focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-4">
+                        Change any parameter to dynamically regenerate the simulation plot.
+                    </p>
+                </div>
+
+                <!-- Right Column: Simulation Plot -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Simulated vs. Measured I-V Curve</h2>
+                    <div class="chart-container">
+                        <canvas id="simChart"></canvas>
+                    </div>
+                </div>
             </div>
-          </td>
-        </tr>
-        <tr><td colspan="2">&nbsp;</td></tr>
-        <tr><td colspan="2"><p class="center-text">From the depletion approximation:</p></td></tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">max (x<sub>p</sub>) =</span>
-              <span id="xp_txt" class="value">0.107</span>&nbsp;μm
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>T</sub> =</span>
-              <span id="VT_txt" class="value">0.0292</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <p>
-              <span class="math">E<sub>s</sub> =</span>
-              <span id="Es0_txt" class="value">1.58e+7</span>&nbsp;V/m
-            </p>
-          </td>
-          <td>
-            <p>
-              <span class="math">V<sub>s</sub> =</span>
-              <span id="VIB0_txt" class="value">0.830</span>&nbsp;V
-            </p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 
-</td></tr></tbody></table>
+            <!-- New Generate Report Button -->
+            <div class="mt-8 text-center">
+                <button id="generateReportBtn" class="bg-teal-600 text-white py-3 px-8 rounded-md hover:bg-teal-700 transition duration-150 font-semibold shadow-md disabled:bg-gray-400">
+                    Generate Report
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 
+    ====================================================================
+    HIDDEN REPORT TEMPLATE
+    This div is styled to look like a paper report.
+    It's positioned off-screen and will be populated by JavaScript,
+    then captured with html2canvas for PDF generation.
+    ====================================================================
+    -->
+    <div id="report-container" style="position: absolute; left: -9999px; width: 8.5in;">
+        <div id="report-content">
+            <!-- Header -->
+            <div class="report-header">
+                <h1>Extraction of diode SPICE parameters related to forward Current-Voltage (I-V)</h1>
+                <p>TCAD Lab IIT KGP</p>
+            </div>
+            <div class="report-date-time">
+                <p id="report-date"></p>
+                <p id="report-time"></p>
+            </div>
+            <div class="report-main-title">
+                <h2>Extraction & Simulation Results</h2>
+            </div>
+
+            <!-- Section 1: Measured Data -->
+            <h3 class="report-section-title">1. Measured Data & Extracted Parameters</h3>
+            <div class="report-table-container">
+                <table class="report-table" id="measured-data-table">
+                    <thead>
+                        <tr><th>Voltage (V)</th><th>Current (A)</th></tr>
+                    </thead>
+                    <tbody id="measured-data-body">
+                        <!-- Data will be injected here by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="report-params">
+                <strong>Extracted Parameters:</strong>
+                <pre id="extracted-params-pre"></pre>
+            </div>
+
+            <!-- Section 2: Simulated Data -->
+            <h3 class="report-section-title">2. Simulated Data & Tuned Parameters</h3>
+            <div class="report-table-container">
+                <table class="report-table" id="simulated-data-table">
+                    <thead>
+                        <tr><th>Voltage (V)</th><th>Current (A)</th></tr>
+                    </thead>
+                    <tbody id="simulated-data-body">
+                        <!-- Data will be injected here by JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="report-params">
+                <strong>Tuned Parameters:</strong>
+                <pre id="tuned-params-pre"></pre>
+            </div>
+
+            <!-- Section 3: Chart -->
+            <h3 class="report-section-title">3. Simulated vs. Measured I-V Curve</h3>
+            <div class="report-chart-container">
+                <img id="report-chart-img" src="" alt="Simulated vs. Measured I-V Curve" style="width: 100%; height: auto;" />
+            </div>
+
+            <!-- Footer -->
+            <div class="report-footer">
+                <div class="report-signatures">
+                    <div class="report-signature-block">Student Signature</div>
+                    <div class="report-signature-block" style="text-align: right;">Instructor Signature</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
+    <script>
+        // --- DOM Elements ---
+        const dataInput = document.getElementById('dataInput');
+        const plotDataBtn = document.getElementById('plotDataBtn');
+        const extractParamsBtn = document.getElementById('extractParamsBtn');
+        const simulateBtn = document.getElementById('simulateBtn');
+        const backToExtractBtn = document.getElementById('backToExtractBtn');
+        
+        const extractionView = document.getElementById('extractionView');
+        const simulationView = document.getElementById('simulationView');
+        
+        const resIs = document.getElementById('resIs');
+        const resN = document.getElementById('resN');
+        const resRs = document.getElementById('resRs');
+        const resN_EC = document.getElementById('resN_EC');
+        
+        const simIs = document.getElementById('simIs');
+        const simN = document.getElementById('simN');
+        const simRs = document.getElementById('simRs');
+        const simN_EC = document.getElementById('simN_EC');
+        const generateReportBtn = document.getElementById('generateReportBtn');
+        
+        const ivChartCtx = document.getElementById('ivChart').getContext('2d');
+        const simChartCtx = document.getElementById('simChart').getContext('2d');
 
-</div>
-   <!--simulation end -->
-  	 
-</body><!--body tag end-->
-</html><!--html tag end-->
+        // --- Chart Instances ---
+        let ivChartInstance = null;
+        let simChartInstance = null;
+        
+        // --- Global State ---
+        let extractedParams = { Is: null, n: null, Rs: null };
+        const T_KELVIN = 300; // Assume room temperature 300K
+        const K_BOLTZMANN = 1.380649e-23;
+        const Q_ELECTRON = 1.602176634e-19;
+        const VT = (K_BOLTZMANN * T_KELVIN) / Q_ELECTRON; // Thermal voltage (~0.02585V)
+
+        // --- Utility Functions ---
+
+        /**
+         * Parses the raw data from the textarea.
+         * @returns {Array<Object>} Array of {v, i} points.
+         */
+        function parseData() {
+            const text = dataInput.value.trim();
+            return text.split('\n')
+                .map(line => {
+                    const parts = line.split(',');
+                    if (parts.length === 2) {
+                        const v = parseFloat(parts[0]);
+                        const i = parseFloat(parts[1]);
+                        if (!isNaN(v) && !isNaN(i) && i > 0) { // Filter out non-positive currents for log plot
+                            return { v, i };
+                        }
+                    }
+                    return null;
+                })
+                .filter(p => p !== null);
+        }
+
+        /**
+         * Performs linear regression on a set of {x, y} points.
+         * @param {Array<Object>} points - Array of {x, y} objects.
+         * @returns {Object} { m: slope, c: y-intercept }
+         */
+        function linearRegression(points) {
+            const n = points.length;
+            if (n === 0) return { m: 0, c: 0 };
+            
+            let sumX = 0, sumY = 0, sumXY = 0, sumXsq = 0;
+            
+            points.forEach(p => {
+                sumX += p.x;
+                sumY += p.y;
+                sumXY += p.x * p.y;
+                sumXsq += p.x * p.x;
+            });
+
+            const denominator = (n * sumXsq - sumX * sumX);
+            if (Math.abs(denominator) < 1e-10) return { m: 0, c: 0 }; // Avoid division by zero
+
+            const m = (n * sumXY - sumX * sumY) / denominator;
+            const c = (sumY - m * sumX) / n;
+            
+            return { m, c };
+        }
+
+        /**
+         * Solves the implicit diode equation for I using Newton-Raphson.
+         * I = Is * (exp((V - I*Rs) / (n*Vt)) - 1)
+         * We solve f(I) = I - Is * (exp((V - I*Rs) / (n*Vt)) - 1) = 0
+         * @param {number} V - Applied voltage
+         * @param {number} Is - Saturation Current
+         * @param {number} n - Ideality Factor
+         * @param {number} Rs - Ohmic Resistance
+         * @returns {number} Diode current I
+         */
+        function solveForI(V, Is, n, Rs, Vt) {
+            if (V <= 0) return 0; // Simplified handling for reverse/zero bias
+            
+            let I_guess = 0.001; // Initial guess
+            
+            for (let iter = 0; iter < 20; iter++) {
+                const Vd = V - I_guess * Rs;
+                if (Vd / (n * Vt) > 70) { // Prevent Math.exp overflow
+                   I_guess = (V - 0.7) / Rs; // Fallback to simple model if voltage is high
+                   if(I_guess < 0) I_guess = 1e-3;
+                   continue;
+                }
+
+                const exp_term = Math.exp(Vd / (n * Vt));
+                const f_I = I_guess - Is * (exp_term - 1);
+                const df_dI = 1 + (Is * Rs / (n * Vt)) * exp_term;
+
+                if (Math.abs(df_dI) < 1e-9) break; // Avoid division by zero
+
+                const I_new = I_guess - f_I / df_dI;
+                
+                if (Math.abs(I_new - I_guess) < 1e-12) {
+                    return I_new > 0 ? I_new : 0; // Return if converged
+                }
+                I_guess = I_new;
+            }
+            return I_guess > 0 ? I_guess : 0; // Return best guess after iterations
+        }
+        
+        /**
+         * Generic function to create/update a chart.
+         */
+        function createChart(ctx, chartInstance, datasets) {
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+            
+            return new Chart(ctx, {
+                type: 'scatter',
+                data: { datasets },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Voltage (V)'
+                            }
+                        },
+                        y: {
+                            type: 'logarithmic',
+                            title: {
+                                display: true,
+                                text: 'Current (A)'
+                            },
+                            ticks: {
+                                // Format ticks to scientific notation
+                                callback: function(value, index, values) {
+                                    return value.toExponential(1);
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += `(${context.parsed.x.toFixed(3)}V, ${context.parsed.y.toExponential(2)}A)`;
+                                    }
+                                    return label;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: datasets.length > 1 // Show legend only if multiple datasets
+                        }
+                    },
+                    elements: {
+                        point: {
+                            radius: 3
+                        },
+                        line: {
+                            tension: 0.1 // Slight curve for simulated data
+                        }
+                    }
+                }
+            });
+        }
+
+        // --- Core Logic Functions ---
+
+        /**
+         * Plots the user-provided data on the extraction chart.
+         */
+        function plotData() {
+            const data = parseData();
+            if (data.length === 0) {
+                // Do not alert on page load
+                // alert("No valid data to plot. Please check the format.");
+                return;
+            }
+            
+            const plotPoints = data.map(p => ({ x: p.v, y: p.i }));
+            
+            const datasets = [{
+                label: 'Measured Data',
+                data: plotPoints,
+                borderColor: 'rgb(29, 78, 216)',
+                backgroundColor: 'rgba(29, 78, 216, 0.5)',
+                showLine: false // Show as scatter
+            }];
+            
+            ivChartInstance = createChart(ivChartCtx, ivChartInstance, datasets);
+        }
+
+        /**
+         * Extracts SPICE parameters from the data.
+         */
+        function extractParameters() {
+            const data = parseData();
+            if (data.length < 5) {
+                alert("Not enough data to extract parameters. Need at least 5 points.");
+                return;
+            }
+
+            // --- Step 1: Find n and Is from the low-current region ---
+            // Use points in the ideal exponential region (e.g., 1e-7A to 1e-3A)
+            const lowCurrentData = data.filter(p => p.i > 1e-7 && p.i < 1e-3);
+            if (lowCurrentData.length < 2) {
+                alert("Could not find sufficient data in the ideal region (1e-7 to 1e-3 A) to extract n and Is.");
+                return;
+            }
+            
+            // Plot ln(I) vs V. Slope m = 1 / (n * Vt), Intercept c = ln(Is)
+            const logData = lowCurrentData.map(p => ({ x: p.v, y: Math.log(p.i) }));
+            const { m: m_log, c: c_log } = linearRegression(logData);
+            
+            if (m_log <= 0) {
+                alert("Parameter extraction failed: Invalid slope in ideal region.");
+                return;
+            }
+
+            const n = 1 / (m_log * VT);
+            const Is = Math.exp(c_log);
+
+            // --- Step 2: Find Rs from the high-current region ---
+            // Plot (V - V_diode) vs I. Slope m = Rs
+            // V_diode = n * Vt * ln(I / Is)
+            const highCurrentData = data.filter(p => p.i > 0.01);
+             if (highCurrentData.length < 2) {
+                alert("Could not find sufficient data in the high-current region (> 0.01 A) to extract Rs.");
+                return;
+            }
+            
+            const rsPoints = highCurrentData.map(p => {
+                const V_diode = n * VT * Math.log(p.i / Is); // (assuming I >> Is)
+                const V_rs = p.v - V_diode;
+                return { x: p.i, y: V_rs }; // x = Current, y = Voltage across Rs
+            });
+            
+            const { m: Rs } = linearRegression(rsPoints);
+
+            // --- Store and Display Results ---
+            extractedParams.Is = Is;
+            extractedParams.n = n;
+            extractedParams.Rs = Rs < 0 ? 0 : Rs; // Ensure Rs is not negative
+            
+            resIs.value = extractedParams.Is.toExponential(4);
+            resN.value = extractedParams.n.toFixed(4);
+            resN_EC.value = extractedParams.n.toFixed(4); // Sync N with n
+            resRs.value = extractedParams.Rs.toFixed(4);
+        }
+
+        /**
+         * Switches to the simulation view.
+         */
+        function showSimulationView() {
+            // Ensure parameters are extracted first
+            if (extractedParams.Is === null) {
+                extractParameters();
+                if (extractedParams.Is === null) {
+                    alert("Please extract parameters before simulating.");
+                    return; // Stop if extraction failed
+                }
+            }
+            
+            // Populate sim inputs
+            simIs.value = extractedParams.Is;
+            simN.value = extractedParams.n;
+            simN_EC.value = extractedParams.n; // Sync N with n
+            simRs.value = extractedParams.Rs;
+            
+            // Show/hide views
+            extractionView.classList.add('hidden');
+            simulationView.classList.remove('hidden');
+            
+            // Run initial simulation
+            updateSimulation();
+        }
+
+        /**
+         * Switches back to the extraction view.
+         */
+        function showExtractionView() {
+            simulationView.classList.add('hidden');
+            extractionView.classList.remove('hidden');
+        }
+
+        /**
+         * Updates the simulation plot based on sim input values.
+         */
+        function updateSimulation() {
+            const Is_sim = parseFloat(simIs.value);
+            const n_sim = parseFloat(simN.value);
+            const Rs_sim = parseFloat(simRs.value);
+
+            if (isNaN(Is_sim) || isNaN(n_sim) || isNaN(Rs_sim)) {
+                return; // Invalid inputs
+            }
+
+            // Generate simulated data
+            const simData = getSimulatedDataPoints(); // Use helper function
+            
+            // Get original measured data for comparison
+            const measuredData = parseData().map(p => ({ x: p.v, y: p.i }));
+
+            const datasets = [
+                {
+                    label: 'Simulated Data',
+                    data: simData,
+                    borderColor: 'rgb(220, 38, 38)',
+                    backgroundColor: 'rgba(220, 38, 38, 0.5)',
+                    showLine: true,
+                    pointRadius: 0 // Hide points for a smooth line
+                },
+                {
+                    label: 'Measured Data',
+                    data: measuredData,
+                    borderColor: 'rgb(29, 78, 216)',
+                    backgroundColor: 'rgba(29, 78, 216, 0.5)',
+                    showLine: false
+                }
+            ];
+            
+            simChartInstance = createChart(simChartCtx, simChartInstance, datasets);
+        }
+
+        /**
+         * Generates an array of simulated data points based on current sim inputs.
+         * @returns {Array<Object>} Array of {x, y} points
+         */
+        function getSimulatedDataPoints() {
+            const Is_sim = parseFloat(simIs.value);
+            const n_sim = parseFloat(simN.value);
+            const Rs_sim = parseFloat(simRs.value);
+
+            if (isNaN(Is_sim) || isNaN(n_sim) || isNaN(Rs_sim)) {
+                return []; // Invalid inputs
+            }
+
+            const simData = [];
+            const data = parseData();
+            // Ensure data is not empty before finding max
+            const vMax = data.length > 0 ? Math.max(...data.map(p => p.v), 1.0) : 1.0; // Get max voltage from data or 1V
+            
+            for (let v = 0; v <= vMax; v += 0.01) {
+                const i_calc = solveForI(v, Is_sim, n_sim, Rs_sim, VT);
+                if (i_calc > 1e-12) { // Only plot non-trivial currents
+                    simData.push({ x: v, y: i_calc });
+                }
+            }
+            return simData;
+        }
+
+        /**
+         * Generates and downloads a PDF report using html2canvas.
+         */
+        function generateReport() {
+            // 0. Check if data is available
+            if (!simChartInstance || !extractedParams.Is) {
+                alert("Please extract parameters and simulate data first.");
+                return;
+            }
+
+            const btn = document.getElementById('generateReportBtn');
+            btn.textContent = 'Generating...';
+            btn.disabled = true;
+
+            try {
+                // 1. Get all data
+                const measuredData = parseData();
+                const simulatedData = getSimulatedDataPoints();
+                const chartImageData = simChartInstance.toBase64Image('image/png', 1.0);
+                const now = new Date();
+
+                // 2. Populate Header
+                document.getElementById('report-date').textContent = `Date: ${now.toLocaleDateString()}`;
+                document.getElementById('report-time').textContent = `Time: ${now.toLocaleTimeString()}`;
+
+                // 3. Populate Measured Data Table
+                const measuredTableBody = document.getElementById('measured-data-body');
+                measuredTableBody.innerHTML = ''; // Clear old data
+                measuredData.forEach(p => {
+                    const row = `<tr><td>${p.v.toFixed(10)}</td><td>${p.i.toExponential(6)}</td></tr>`;
+                    measuredTableBody.innerHTML += row;
+                });
+
+                // 4. Populate Extracted Params
+                const extractedParamsPre = document.getElementById('extracted-params-pre');
+                extractedParamsPre.textContent = 
+`Saturation Current (Is): ${resIs.value} A
+Ideality Factor (n):     ${resN.value}
+Emission Coefficient (N): ${resN_EC.value}
+Ohmic Resistance (Rs):   ${resRs.value} \u03A9`;
+
+                // 5. Populate Simulated Data Table
+                const simulatedTableBody = document.getElementById('simulated-data-body');
+                simulatedTableBody.innerHTML = ''; // Clear old data
+                simulatedData.forEach(p => {
+                    const row = `<tr><td>${p.x.toFixed(2)}</td><td>${p.y.toExponential(6)}</td></tr>`;
+                    simulatedTableBody.innerHTML += row;
+                });
+
+                // 6. Populate Tuned Params
+                const tunedParamsPre = document.getElementById('tuned-params-pre');
+                tunedParamsPre.textContent = 
+`Saturation Current (Is): ${parseFloat(simIs.value).toExponential(4)} A
+Ideality Factor (n):     ${parseFloat(simN.value).toFixed(4)}
+Emission Coefficient (N): ${parseFloat(simN_EC.value).toFixed(4)}
+Ohmic Resistance (Rs):   ${parseFloat(simRs.value).toFixed(4)} \u03A9`;
+
+                // 7. Add Chart Image
+                const reportChartImg = document.getElementById('report-chart-img');
+                reportChartImg.src = chartImageData;
+
+                // 8. Run html2canvas
+                const content = document.getElementById('report-content');
+                const { jsPDF } = window.jspdf;
+
+                // Use a timeout to allow the <img> tag to load the src
+                setTimeout(() => {
+                    html2canvas(content, {
+                        scale: 2, // Higher scale for better resolution
+                        useCORS: true,
+                        logging: false,
+                        windowWidth: content.scrollWidth,
+                        windowHeight: content.scrollHeight
+                    }).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png');
+                        
+                        // Using 'pt' as units. 1 inch = 72 pt. 8.5in = 612pt. 11in = 792pt (Letter)
+                        const pdf = new jsPDF('p', 'pt', 'letter');
+                        const pdfWidth = pdf.internal.pageSize.getWidth();
+                        const pdfHeight = pdf.internal.pageSize.getHeight();
+
+                        // Calculate the aspect ratio
+                        const canvasWidth = canvas.width;
+                        const canvasHeight = canvas.height;
+                        const canvasAspectRatio = canvasHeight / canvasWidth;
+
+                        let finalPdfWidth = pdfWidth;
+                        let finalPdfHeight = pdfWidth * canvasAspectRatio;
+
+                        // Check if it fits, if not, scale down (should fit on one page)
+                        if (finalPdfHeight > pdfHeight) {
+                            finalPdfHeight = pdfHeight;
+                            finalPdfWidth = pdfHeight / canvasAspectRatio;
+                        }
+                        
+                        // Center the image (if it's narrower than the page)
+                        const xOffset = (pdfWidth - finalPdfWidth) / 2;
+
+                        pdf.addImage(imgData, 'PNG', xOffset, 0, finalPdfWidth, finalPdfHeight, undefined, 'FAST');
+                        pdf.save('diode_report.pdf');
+
+                        // Restore button
+                        btn.textContent = 'Generate Report';
+                        btn.disabled = false;
+                    }).catch(err => {
+                        console.error("Error generating PDF:", err);
+                        alert("An error occurred while generating the report. See console for details.");
+                        btn.textContent = 'Generate Report';
+                        btn.disabled = false;
+                    });
+                }, 200); // 200ms delay to ensure image is fully loaded into the template
+
+            } catch (error) {
+                console.error("Error preparing report:", error);
+                alert("An error occurred while preparing the report. See console for details.");
+                btn.textContent = 'Generate Report';
+                btn.disabled = false;
+            }
+        }
+
+        // --- Event Listeners ---
+        plotDataBtn.addEventListener('click', plotData);
+        extractParamsBtn.addEventListener('click', extractParameters);
+        simulateBtn.addEventListener('click', showSimulationView);
+        backToExtractBtn.addEventListener('click', showExtractionView);
+
+        // Add listeners to sim inputs for dynamic updates
+        simIs.addEventListener('input', updateSimulation);
+        
+        simN.addEventListener('input', () => {
+            simN_EC.value = simN.value; // Sync N_EC to N
+            updateSimulation();
+        });
+        simN_EC.addEventListener('input', () => { // Sync N to N_EC
+            simN.value = simN_EC.value;
+            updateSimulation();
+        });
+
+        simRs.addEventListener('input', updateSimulation);
+        generateReportBtn.addEventListener('click', generateReport);
+        
+        // Plot default data on page load
+        window.onload = plotData;
+
+    </script>
+</body>
+</html>
+
