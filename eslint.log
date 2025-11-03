@@ -1,0 +1,30 @@
+
+/home/runner/work/exp-diode-iv-spice-iitkgp/exp-diode-iv-spice-iitkgp/experiment/simulation/js/jquery.flot.min.js
+  1:914    warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  1:1057   warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  1:1246   warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  1:1278   warning  Unnecessary escape character: \%                                 no-useless-escape
+  1:1308   warning  Unnecessary escape character: \%                                 no-useless-escape
+  1:1338   warning  Unnecessary escape character: \%                                 no-useless-escape
+  1:1434   warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  1:1467   warning  Unnecessary escape character: \%                                 no-useless-escape
+  1:1497   warning  Unnecessary escape character: \%                                 no-useless-escape
+  1:1527   warning  Unnecessary escape character: \%                                 no-useless-escape
+  1:1668   warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  1:1797   warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  1:2910   warning  'jQuery' is not defined                                          no-undef
+  1:13325  warning  'n' is already defined                                           no-redeclare
+  1:26009  warning  's' is already defined                                           no-redeclare
+  1:28052  warning  'g' is already defined                                           no-redeclare
+  1:28059  warning  'b' is already defined                                           no-redeclare
+  2:1924   warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  2:3267   warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  2:3676   warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  2:3713   warning  'f' is already defined                                           no-redeclare
+  2:3715   warning  'u' is already defined                                           no-redeclare
+  2:3753   warning  'd' is already defined                                           no-redeclare
+  2:3757   warning  Expected a conditional expression and instead saw an assignment  no-cond-assign
+  2:3983   warning  'jQuery' is not defined                                          no-undef
+
+✖ 25 problems (0 errors, 25 warnings)
+
